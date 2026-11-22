@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="it" class="h-full select-none">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Typer Kids 🚀 - Impara a Digitare Giocando!</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        space: {
+                            900: '#0f0c29',
+                            800: '#24243e',
+                            700: '#302b63',
+                        },
+                        neon: {
+                            pink: '#ff007f',
+                            cyan: '#00f0ff',
+                            yellow: '#ffe600',
+                            purple: '#9d00ff',
+                            green: '#00ff66'
+                        }
+                    },
+                    fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & Canvas Confetti -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Fira+Code:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Fredoka', cursive, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            overflow-x: hidden;
+        }
+
+        .font-mono-code {
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Continuous Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* On-Screen Keyboard Kids Style */
+        .key-btn {
+            transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 0 #1e1b4b;
+        }
+        .key-btn:active, .key-active {
+            transform: translateY(3px) !important;
+            box-shadow: 0 1px 0 #1e1b4b !important;
+            background-color: #ffe600 !important;
+            color: #000 !important;
+        }
+
+        /* Custom Finger Indicators */
+        .finger-pinky { border-bottom: 4px solid #ff007f; }
+        .finger-ring { border-bottom: 4px solid #3b82f6; }
+        .finger-middle { border-bottom: 4px solid #10b981; }
+        .finger-index { border-bottom: 4px solid #f59e0b; }
+        .finger-thumb { border-bottom: 4px solid #a855f7; }
+
+        /* Certificate Print Layout */
+        @media print {
+            body * { visibility: hidden; }
+            #kids-certificate, #kids-certificate * { visibility: visible; }
+            #kids-certificate {
+                position: absolute;
+                left: 0; top: 0; width: 100%; height: 100%;
+                display: flex !important;
+                background: white !important;
+                color: #111 !important;
+                margin: 0; padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen flex flex-col justify-between">
+
+    <!-- WELCOME / PILOT SETUP MODAL -->
+    <div id="welcome-modal" class="fixed inset-0 bg-space-900/95 backdrop-blur-lg z-50 flex items-center justify-center p-4">
+        <div class="bg-gradient-to-b from-purple-900 to-space-900 border-4 border-neon-cyan w-full max-w-md rounded-3xl p-6 shadow-2xl text-center transform scale-100 animate-float">
+            <div class="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-neon-pink to-neon-purple flex items-center justify-center text-4xl shadow-xl shadow-neon-pink/40 mb-4 animate-bounce">
+                🚀
+            </div>
+            <h2 class="text-3xl font-black bg-gradient-to-r from-neon-cyan via-neon-yellow to-neon-pink bg-clip-text text-transparent">
+                Space Typer Kids
+            </h2>
+            <p class="text-sm font-bold text-cyan-200 mt-1 mb-6">Benvenuto Pilota Spaziale! Inserisci i tuoi dati per iniziare la missione ✨</p>
+
+            <form id="pilot-setup-form" class="space-y-4 text-left">
+                <div>
+                    <label for="pilot-firstname" class="block text-xs font-extrabold text-yellow-300 uppercase mb-1">Nome:</label>
+                    <input type="text" id="pilot-firstname" required placeholder="Es. Marco, Sofia..." class="w-full px-4 py-3 rounded-2xl bg-purple-950/80 text-white font-bold text-lg border-2 border-purple-500/50 focus:border-neon-cyan focus:outline-none transition-all placeholder-purple-400">
+                </div>
+                <div>
+                    <label for="pilot-lastname" class="block text-xs font-extrabold text-yellow-300 uppercase mb-1">Cognome:</label>
+                    <input type="text" id="pilot-lastname" required placeholder="Es. Rossi, Bianchi..." class="w-full px-4 py-3 rounded-2xl bg-purple-950/80 text-white font-bold text-lg border-2 border-purple-500/50 focus:border-neon-cyan focus:outline-none transition-all placeholder-purple-400">
+                </div>
+
+                <button type="submit" class="w-full py-4 mt-2 rounded-2xl bg-gradient-to-r from-neon-pink via-purple-600 to-neon-cyan hover:from-pink-500 hover:to-cyan-400 text-white text-xl font-black shadow-2xl border-2 border-yellow-300 transform active:scale-95 transition-all flex items-center justify-center gap-2">
+                    🎮 ENTRA NELL'ASTRONAVE
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOP NAV BAR -->
+    <header class="p-3 sm:p-4 bg-slate-900/70 backdrop-blur-md border-b-4 border-neon-purple/40">
+        <div class="max-w-6xl mx-auto flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
+            <!-- Game Title Logo & Pilot Display -->
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-neon-pink to-neon-purple flex items-center justify-center text-2xl shadow-lg shadow-neon-pink/30 animate-bounce">
+                    🚀
+                </div>
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-wide bg-gradient-to-r from-neon-cyan via-neon-yellow to-neon-pink bg-clip-text text-transparent">
+                        Space Typer Kids
+                    </h1>
+                    <p class="text-xs text-cyan-300 font-semibold">Pilota: <span id="nav-pilot-name" class="text-neon-yellow font-extrabold">Ospite</span> ✨</p>
+                </div>
+            </div>
+
+            <!-- Quick Controls + JSON Download/Upload -->
+            <div class="flex items-center gap-2 flex-wrap">
+                <button id="export-json-btn" type="button" class="px-3 py-2 rounded-2xl bg-indigo-900/80 hover:bg-indigo-800 border-2 border-indigo-400/50 text-yellow-300 shadow-md transition-all active:scale-95 flex items-center gap-1.5" title="Scarica Impostazioni JSON">
+                    📥 <span class="text-xs font-bold text-white hidden sm:inline">Salva JSON</span>
+                </button>
+                <button id="import-json-btn" type="button" class="px-3 py-2 rounded-2xl bg-emerald-900/80 hover:bg-emerald-800 border-2 border-emerald-400/50 text-yellow-300 shadow-md transition-all active:scale-95 flex items-center gap-1.5" title="Carica Impostazioni JSON">
+                    📤 <span class="text-xs font-bold text-white hidden sm:inline">Carica JSON</span>
+                </button>
+                <input type="file" id="json-file-input" accept=".json" class="hidden">
+
+                <button id="sound-btn" type="button" class="px-3 py-2 rounded-2xl bg-purple-900/80 hover:bg-purple-800 border-2 border-neon-cyan/50 text-xl text-yellow-300 shadow-md transition-all active:scale-95 flex items-center gap-2">
+                    <span id="sound-icon">🔊</span>
+                    <span class="text-xs font-bold text-white hidden sm:inline">Audio</span>
+                </button>
+                <button id="keyboard-toggle-btn" type="button" class="px-3 py-2 rounded-2xl bg-purple-900/80 hover:bg-purple-800 border-2 border-neon-pink/50 text-xl text-white shadow-md transition-all active:scale-95 flex items-center gap-2">
+                    🎹 <span class="text-xs font-bold hidden sm:inline">Tastiera</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN GAME AREA -->
+    <main class="max-w-5xl w-full mx-auto px-4 py-4 flex-grow flex flex-col gap-4 justify-center">
+
+        <!-- GAME CONTROLS & DIFFICULTY PANEL -->
+        <div class="bg-purple-950/70 border-4 border-purple-600/50 rounded-3xl p-3 sm:p-4 shadow-2xl flex flex-wrap items-center justify-between gap-3 backdrop-blur-md">
+            
+            <!-- Difficulty Levels + Personalizzato -->
+            <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-xs font-bold text-yellow-300 uppercase tracking-wider mr-1">🎮 Livello:</span>
+                <button data-level="easy" type="button" class="level-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-neon-pink to-purple-600 text-white shadow-lg border-2 border-white/40 transition-all transform scale-105">
+                    🐣 1. Facile (Solo Lettere)
+                </button>
+                <button data-level="medium" type="button" class="level-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-purple-900/80 hover:bg-purple-800 text-purple-200 border-2 border-purple-700/50 transition-all">
+                    🍕 2. Medio (Parole)
+                </button>
+                <button data-level="expert" type="button" class="level-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-purple-900/80 hover:bg-purple-800 text-purple-200 border-2 border-purple-700/50 transition-all">
+                    🌟 3. Esperto (Frasi Complete)
+                </button>
+                <button data-level="custom" type="button" class="level-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-purple-900/80 hover:bg-purple-800 text-purple-200 border-2 border-purple-700/50 transition-all">
+                    ✍️ Personalizzato
+                </button>
+            </div>
+
+            <!-- Timer Preset Selector -->
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-cyan-300 uppercase tracking-wider mr-1">⏱️ Tempo:</span>
+                <button data-time="15" type="button" class="time-btn px-3 py-1.5 rounded-xl text-sm font-bold bg-purple-900/80 hover:bg-purple-800 text-purple-200 border-2 border-purple-700/50 transition-all">15s</button>
+                <button data-time="30" type="button" class="time-btn active px-3 py-1.5 rounded-xl text-sm font-bold bg-gradient-to-r from-neon-cyan to-blue-600 text-slate-900 shadow-lg border-2 border-white/40 transition-all">30s</button>
+                <button data-time="60" type="button" class="time-btn px-3 py-1.5 rounded-xl text-sm font-bold bg-purple-900/80 hover:bg-purple-800 text-purple-200 border-2 border-purple-700/50 transition-all">60s</button>
+                
+                <!-- Custom Time Input -->
+                <div class="relative flex items-center">
+                    <input type="number" id="custom-time" min="5" max="300" placeholder="Sec" class="w-16 px-2 py-1 rounded-xl text-sm bg-purple-900/90 border-2 border-neon-cyan text-yellow-300 font-bold text-center focus:outline-none">
+                    <span class="text-xs font-bold text-cyan-300 ml-1">s</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- CUSTOM TEXT AREA INPUT PANEL -->
+        <div id="custom-text-panel" class="hidden bg-purple-950/80 border-4 border-neon-yellow/60 rounded-3xl p-3 sm:p-4 shadow-2xl transition-all">
+            <div class="flex justify-between items-center mb-2">
+                <label for="custom-text-input" class="text-xs font-extrabold text-yellow-300 uppercase tracking-wider flex items-center gap-2">
+                    ✍️ Inserisci il testo personalizzato per il gioco:
+                </label>
+                <span class="text-xs font-semibold text-cyan-300">Space Typer Kids</span>
+            </div>
+            <textarea id="custom-text-input" rows="3" placeholder="Scrivi o incolla qui il testo su cui far esercitare il ragazzo (es. una favola, una poesia o le sue parole di verifica)..." class="w-full p-3 rounded-2xl bg-purple-900/90 text-white font-medium border-2 border-purple-500/50 focus:border-neon-yellow focus:outline-none placeholder-purple-400 text-sm sm:text-base"></textarea>
+            <p class="text-xs text-purple-300 mt-1">💡 Quando il ragazzo completa l'intero testo personalizzato, il gioco terminerà automaticamente!</p>
+        </div>
+
+        <!-- KIDS DASHBOARD SCORE / STATS -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="bg-gradient-to-b from-purple-900/90 to-purple-950/90 border-4 border-neon-cyan/60 rounded-2xl p-3 text-center shadow-xl">
+                <span class="text-xs font-extrabold text-cyan-300 uppercase tracking-wider">⏱️ Tempo Rimanente</span>
+                <div id="stat-time" class="text-3xl sm:text-4xl font-black text-neon-yellow font-mono-code mt-0.5">30s</div>
+            </div>
+
+            <div class="bg-gradient-to-b from-purple-900/90 to-purple-950/90 border-4 border-neon-green/60 rounded-2xl p-3 text-center shadow-xl">
+                <span class="text-xs font-extrabold text-emerald-300 uppercase tracking-wider">⚡ Velocità WPM</span>
+                <div id="stat-wpm" class="text-3xl sm:text-4xl font-black text-neon-green font-mono-code mt-0.5">0</div>
+            </div>
+
+            <div class="bg-gradient-to-b from-purple-900/90 to-purple-950/90 border-4 border-neon-pink/60 rounded-2xl p-3 text-center shadow-xl">
+                <span class="text-xs font-extrabold text-pink-300 uppercase tracking-wider">🔥 Super Combo</span>
+                <div id="stat-combo" class="text-3xl sm:text-4xl font-black text-neon-pink font-mono-code mt-0.5">x0</div>
+            </div>
+
+            <div class="bg-gradient-to-b from-purple-900/90 to-purple-950/90 border-4 border-yellow-500/60 rounded-2xl p-3 text-center shadow-xl">
+                <span class="text-xs font-extrabold text-yellow-300 uppercase tracking-wider">🎯 Precisione</span>
+                <div id="stat-accuracy" class="text-3xl sm:text-4xl font-black text-yellow-300 font-mono-code mt-0.5">100%</div>
+            </div>
+        </div>
+
+        <!-- GAMEPLAY CANVAS / ANIMATION TRACK -->
+        <div class="relative bg-space-900/90 border-4 border-neon-purple/70 rounded-3xl p-4 sm:p-6 shadow-2xl overflow-hidden min-h-[220px] flex flex-col justify-between">
+            
+            <!-- Click to Start Focus Mask -->
+            <div id="click-focus-mask" class="absolute inset-0 bg-space-900/95 backdrop-blur-md z-30 flex flex-col items-center justify-center cursor-pointer transition-all p-4">
+                <div class="text-6xl animate-bounce mb-3">🚀</div>
+                <button id="start-mission-btn" type="button" class="px-8 py-4 rounded-3xl bg-gradient-to-r from-neon-pink via-purple-600 to-neon-cyan hover:from-pink-500 hover:to-cyan-400 text-white text-2xl sm:text-3xl font-black shadow-2xl border-4 border-yellow-300 transform hover:scale-105 active:scale-95 transition-all">
+                    ▶️ INIZIO
+                </button>
+                <p id="mask-sub" class="text-sm font-bold text-yellow-300 mt-3">Premi INIZIO per cominciare una nuova partita!</p>
+            </div>
+
+            <!-- Hidden Typing Input -->
+            <input type="text" id="typing-input" class="absolute opacity-0 pointer-events-none -left-full top-0" autocomplete="off" capitalize="off" spellcheck="false">
+
+            <!-- SPACESHIP TRACK ANIMATION -->
+            <div class="relative w-full h-16 bg-purple-950/40 rounded-2xl border-2 border-purple-700/40 p-2 flex items-center mb-4 overflow-hidden">
+                <div class="absolute inset-0 flex justify-between items-center px-4 opacity-30 text-lg">
+                    <span>⭐</span><span>✨</span><span>🌟</span><span>⭐</span><span>✨</span>
+                </div>
+                
+                <div id="spaceship" class="relative z-10 text-4xl sm:text-5xl transition-all duration-300 animate-float transform" style="left: 0%;">
+                    🛸
+                </div>
+
+                <div class="absolute right-3 text-4xl sm:text-5xl animate-pulse">
+                    🪐
+                </div>
+            </div>
+
+            <!-- ASTEROID / TEXT TARGET DISPLAY -->
+            <div class="relative z-10 flex flex-col items-center justify-center my-2 min-h-[90px]">
+                <div id="text-target" class="font-mono-code text-2xl sm:text-4xl md:text-5xl font-bold tracking-wider text-center text-slate-300 break-words max-w-full px-4 py-2 bg-purple-950/60 rounded-2xl border-2 border-purple-500/30 shadow-inner">
+                    <!-- Dynamic Spans Generated Here -->
+                </div>
+            </div>
+
+            <!-- Bottom Interactive Controls -->
+            <div class="flex justify-between items-center pt-3 border-t-2 border-purple-800/40 text-xs sm:text-sm">
+                <div class="text-cyan-300 font-bold flex items-center gap-1">
+                    <span>💡 Suggerimento:</span> <span id="typing-hint" class="text-white">Premi le lettere evidenziate!</span>
+                </div>
+                <button id="reset-game-btn" type="button" class="px-4 py-2 rounded-xl bg-gradient-to-r from-neon-pink to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-extrabold shadow-lg active:scale-95 transition-all flex items-center gap-2">
+                    🔄 Riavvia
+                </button>
+            </div>
+        </div>
+
+        <!-- ON-SCREEN KEYBOARD FOR KIDS -->
+        <div id="keyboard-wrapper" class="bg-purple-950/80 border-4 border-purple-600/60 rounded-3xl p-3 sm:p-4 shadow-2xl transition-all">
+            <div class="flex justify-between items-center mb-2 px-2">
+                <span class="text-xs font-black text-yellow-300 uppercase tracking-wider">
+                    🖐️ Guida Dita Tastiera (QWERTY Italia)
+                </span>
+                <div class="hidden sm:flex gap-2 text-xs font-bold text-slate-300">
+                    <span class="text-pink-400">● Mignolo</span>
+                    <span class="text-blue-400">● Anulare</span>
+                    <span class="text-emerald-400">● Medio</span>
+                    <span class="text-amber-400">● Indice</span>
+                    <span class="text-purple-400">● Pollice</span>
+                </div>
+            </div>
+
+            <!-- Keyboard Layout -->
+            <div class="flex flex-col gap-1.5 max-w-3xl mx-auto text-xs sm:text-sm font-black select-none">
+                <!-- Row 1 -->
+                <div class="flex gap-1 justify-center">
+                    <div data-key="1" class="key-btn finger-pinky bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">1</div>
+                    <div data-key="2" class="key-btn finger-ring bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">2</div>
+                    <div data-key="3" class="key-btn finger-middle bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">3</div>
+                    <div data-key="4" class="key-btn finger-index bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">4</div>
+                    <div data-key="5" class="key-btn finger-index bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">5</div>
+                    <div data-key="6" class="key-btn finger-index bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">6</div>
+                    <div data-key="7" class="key-btn finger-index bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">7</div>
+                    <div data-key="8" class="key-btn finger-middle bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">8</div>
+                    <div data-key="9" class="key-btn finger-ring bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">9</div>
+                    <div data-key="0" class="key-btn finger-pinky bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">0</div>
+                </div>
+                <!-- Row 2 -->
+                <div class="flex gap-1 justify-center">
+                    <div data-key="q" class="key-btn finger-pinky bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">Q</div>
+                    <div data-key="w" class="key-btn finger-ring bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">W</div>
+                    <div data-key="e" class="key-btn finger-middle bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">E</div>
+                    <div data-key="r" class="key-btn finger-index bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">R</div>
+                    <div data-key="t" class="key-btn finger-index bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">T</div>
+                    <div data-key="y" class="key-btn finger-index bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">Y</div>
+                    <div data-key="u" class="key-btn finger-index bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">U</div>
+                    <div data-key="i" class="key-btn finger-middle bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">I</div>
+                    <div data-key="o" class="key-btn finger-ring bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">O</div>
+                    <div data-key="p" class="key-btn finger-pinky bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">P</div>
+                </div>
+                <!-- Row 3 -->
+                <div class="flex gap-1 justify-center">
+                    <div data-key="a" class="key-btn finger-pinky bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">A</div>
+                    <div data-key="s" class="key-btn finger-ring bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">S</div>
+                    <div data-key="d" class="key-btn finger-middle bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">D</div>
+                    <div data-key="f" class="key-btn finger-index bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center underline underline-offset-4 font-black">F</div>
+                    <div data-key="g" class="key-btn finger-index bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">G</div>
+                    <div data-key="h" class="key-btn finger-index bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">H</div>
+                    <div data-key="j" class="key-btn finger-index bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center underline underline-offset-4 font-black">J</div>
+                    <div data-key="k" class="key-btn finger-middle bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">K</div>
+                    <div data-key="l" class="key-btn finger-ring bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">L</div>
+                </div>
+                <!-- Row 4 -->
+                <div class="flex gap-1 justify-center">
+                    <div data-key="z" class="key-btn finger-pinky bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">Z</div>
+                    <div data-key="x" class="key-btn finger-ring bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">X</div>
+                    <div data-key="c" class="key-btn finger-middle bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">C</div>
+                    <div data-key="v" class="key-btn finger-index bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">V</div>
+                    <div data-key="b" class="key-btn finger-index bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">B</div>
+                    <div data-key="n" class="key-btn finger-index bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">N</div>
+                    <div data-key="m" class="key-btn finger-index bg-purple-800 text-white w-7 sm:w-9 h-10 rounded-xl flex items-center justify-center">M</div>
+                </div>
+                <!-- Row 5 -->
+                <div class="flex gap-1 justify-center mt-1">
+                    <div data-key=" " class="key-btn finger-thumb bg-purple-800 text-neon-yellow w-56 sm:w-72 h-10 rounded-xl flex items-center justify-center font-bold">
+                        BARRA SPAZIO 🚀
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- RESULT MODAL -->
+    <div id="kids-result-modal" class="fixed inset-0 bg-space-900/90 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden opacity-0 transition-all duration-300">
+        <div class="bg-gradient-to-b from-purple-900 to-space-900 border-4 border-neon-cyan w-full max-w-lg rounded-3xl p-6 shadow-2xl text-center transform scale-95 transition-all">
+            
+            <div id="modal-avatar" class="text-7xl animate-bounce mb-2">🏆</div>
+            <h2 id="modal-title" class="text-3xl font-black text-neon-yellow">Campione Spaziale!</h2>
+            <p id="modal-subtitle" class="text-sm font-bold text-cyan-200 mt-1">Hai guidato l'astronave alla perfezione!</p>
+
+            <div class="my-4 bg-purple-950/80 p-3 rounded-2xl border-2 border-purple-600/50">
+                <label for="kid-name-input" class="block text-xs font-bold text-yellow-300 uppercase mb-1">Nome Pilota per il Diploma:</label>
+                <input type="text" id="kid-name-input" placeholder="Es. Marco Rossi" value="Super Pilota" class="w-full px-3 py-2 rounded-xl bg-purple-900 text-white text-center font-black text-lg border-2 border-neon-cyan focus:outline-none">
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 my-4">
+                <div class="bg-purple-950/60 p-2 rounded-xl border border-purple-700/40">
+                    <span class="text-[10px] font-bold text-cyan-300 uppercase">Velocità</span>
+                    <div id="modal-wpm-val" class="text-2xl font-black text-neon-green font-mono">0</div>
+                    <span class="text-[10px] text-slate-400">WPM</span>
+                </div>
+                <div class="bg-purple-950/60 p-2 rounded-xl border border-purple-700/40">
+                    <span class="text-[10px] font-bold text-cyan-300 uppercase">Precisione</span>
+                    <div id="modal-acc-val" class="text-2xl font-black text-neon-yellow font-mono">0%</div>
+                    <span class="text-[10px] text-slate-400">Esattezza</span>
+                </div>
+                <div class="bg-purple-950/60 p-2 rounded-xl border border-purple-700/40">
+                    <span class="text-[10px] font-bold text-cyan-300 uppercase">Stelle</span>
+                    <div id="modal-stars-val" class="text-2xl font-black text-neon-pink font-mono">⭐⭐⭐</div>
+                    <span class="text-[10px] text-slate-400">Valutazione</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 mb-4">
+                <div class="bg-purple-950/60 p-2 rounded-xl border border-purple-700/40">
+                    <span class="text-[10px] font-bold text-cyan-300 uppercase">Lettere</span>
+                    <div id="modal-letters-val" class="text-2xl font-black text-neon-cyan font-mono">0</div>
+                    <span class="text-[10px] text-slate-400">corrette</span>
+                </div>
+                <div class="bg-purple-950/60 p-2 rounded-xl border border-purple-700/40">
+                    <span class="text-[10px] font-bold text-cyan-300 uppercase">Parole</span>
+                    <div id="modal-words-val" class="text-2xl font-black text-neon-cyan font-mono">0</div>
+                    <span class="text-[10px] text-slate-400">completate</span>
+                </div>
+                <div class="bg-purple-950/60 p-2 rounded-xl border border-purple-700/40">
+                    <span class="text-[10px] font-bold text-cyan-300 uppercase">Tempo</span>
+                    <div id="modal-time-val" class="text-2xl font-black text-neon-cyan font-mono">0s</div>
+                    <span class="text-[10px] text-slate-400">di gioco</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 justify-center mt-4">
+                <button id="print-certificate-btn" type="button" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-slate-900 font-black text-sm shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-all">
+                    🖨️ Stampa Diploma
+                </button>
+                <button id="download-txt-report" type="button" class="px-4 py-2.5 rounded-xl bg-purple-800 hover:bg-purple-700 text-cyan-300 font-extrabold text-sm border border-cyan-500/40 flex items-center justify-center gap-2 active:scale-95 transition-all">
+                    💾 Scarica Report
+                </button>
+                <button id="play-again-btn" type="button" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-green to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-slate-950 font-black text-sm shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-all">
+                    🚀 Gioca Ancora
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRINTABLE KIDS DIPLOMA -->
+    <div id="kids-certificate" class="hidden flex-col items-center justify-between border-8 border-amber-400 p-8 rounded-3xl bg-amber-50 text-slate-900 text-center font-sans">
+        <div class="w-full flex justify-between items-center border-b-4 border-amber-400 pb-4">
+            <span class="text-4xl">🚀</span>
+            <h1 class="text-3xl font-black uppercase text-amber-600 tracking-wider">ATTESTATO DI MAESTRO DELLA TASTIERA</h1>
+            <span class="text-4xl">🪐</span>
+        </div>
+
+        <div class="my-6">
+            <p class="text-lg font-bold text-slate-600">Si certifica che il super pilota spaziale</p>
+            <h2 id="cert-kid-name" class="text-4xl font-black text-purple-900 my-2 underline decoration-amber-400">SUPER PILOTA</h2>
+            <p class="text-base text-slate-700 max-w-md mx-auto">
+                ha completato con successo la missione di digitazione su **Space Typer Kids**, dimostrando grande velocità, precisione e uso corretto delle dita!
+            </p>
+        </div>
+
+        <div class="grid grid-cols-3 gap-6 w-full max-w-lg my-4 bg-amber-100 p-4 rounded-2xl border-2 border-amber-300">
+            <div>
+                <span class="text-xs font-bold text-slate-500 uppercase">Velocità Raggiunta</span>
+                <div id="cert-wpm" class="text-3xl font-black text-purple-800">0 WPM</div>
+            </div>
+            <div>
+                <span class="text-xs font-bold text-slate-500 uppercase">Precisione Tasti</span>
+                <div id="cert-acc" class="text-3xl font-black text-emerald-600">100%</div>
+            </div>
+            <div>
+                <span class="text-xs font-bold text-slate-500 uppercase">Valutazione</span>
+                <div id="cert-stars" class="text-2xl text-amber-500 font-bold">⭐⭐⭐</div>
+            </div>
+        </div>
+
+        <p class="text-base font-bold text-slate-700">In <span id="cert-time">30</span> secondi ha scritto <span id="cert-letters">0</span> lettere e <span id="cert-words">0</span> parole!</p>
+
+        <div class="w-full flex justify-between items-end border-t-2 border-slate-300 pt-4 mt-4 text-xs font-bold text-slate-500">
+            <div>Data: <span id="cert-date">DD/MM/YYYY</span></div>
+            <div class="text-center">
+                <div class="w-24 border-b-2 border-slate-900 mx-auto mb-1"></div>
+                Firma Comandante Spaziale
+            </div>
+            <div>Space Typer Kids 🚀</div>
+        </div>
+    </div>
+
+    <!-- MAIN JAVASCRIPT ENGINE -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- pilot registration ---
+            let pilotFullName = "Super Pilota";
+            const welcomeModal = document.getElementById('welcome-modal');
+            const pilotSetupForm = document.getElementById('pilot-setup-form');
+            const pilotFirstName = document.getElementById('pilot-firstname');
+            const pilotLastName = document.getElementById('pilot-lastname');
+            const navPilotName = document.getElementById('nav-pilot-name');
+
+            if (pilotSetupForm) {
+                pilotSetupForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const first = pilotFirstName.value.trim();
+                    const last = pilotLastName.value.trim();
+                    if (first && last) {
+                        pilotFullName = `${first} ${last}`;
+                        if (navPilotName) navPilotName.textContent = pilotFullName;
+                        if (kidNameInput) kidNameInput.value = pilotFullName;
+                        welcomeModal.classList.add('hidden');
+                        initGame();
+                        showIdle();
+                    }
+                });
+            }
+
+            // --- 3 EXACT CONTENT BANKS ---
+            const CONTENT_BANKS = {
+                easy: [
+                    "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", 
+                    "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
+                ],
+                medium: [
+                    "stella", "spazio", "razzo", "alieno", "cometa", "pianeta", "laser", "robot", "luna", "sole",
+                    "orbita", "galassia", "eclissi", "satellite", "universo", "cosmo", "astro", "telescopio",
+                    "gatto", "cane", "orso", "leone", "tigre", "volpe", "lupo", "aquila", "delfino", "balena",
+                    "albero", "fiore", "fiume", "monte", "bosco", "prato", "nuvola", "pioggia", "vento",
+                    "casa", "scuola", "parco", "gioco", "gelato", "pizza", "torta", "pane", "mela", "palla",
+                    "musica", "libri", "matita", "colore", "amico", "festa", "viaggio", "mappa", "tesoro", "magia"
+                ],
+                expert: [
+                    "Il gatto vola sulla luna",
+                    "Il razzo rosso va velocissimo",
+                    "Sei un vero campione della tastiera",
+                    "Un alieno simpatico mangia la pizza",
+                    "Le stelle brillano nel cielo blu",
+                    "L astronave viaggia verso una nuova galassia",
+                    "Imparare a digitare e un avventura fantastica",
+                    "I robot ballano la musica spaziale"
+                ]
+            };
+
+            // Custom text state
+            let customPhrases = [];
+            let customPhraseIndex = 0;
+
+            // --- AUDIO SYSTEM WITH WEB AUDIO API ---
+            class KidsSoundSystem {
+                constructor() {
+                    this.ctx = null;
+                    this.enabled = true;
+                }
+
+                init() {
+                    if (!this.ctx) {
+                        try {
+                            const AudioContext = window.AudioContext || window.webkitAudioContext;
+                            this.ctx = new AudioContext();
+                        } catch (e) {
+                            console.warn("Web Audio non supportato.");
+                        }
+                    }
+                    if (this.ctx && this.ctx.state === 'suspended') {
+                        this.ctx.resume();
+                    }
+                }
+
+                playPop() {
+                    if (!this.enabled) return;
+                    this.init();
+                    if (!this.ctx) return;
+                    try {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(400 + Math.random() * 300, this.ctx.currentTime);
+                        osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.08);
+                        gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+                        gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+                        osc.start();
+                        osc.stop(this.ctx.currentTime + 0.08);
+                    } catch(e) {}
+                }
+
+                playError() {
+                    if (!this.enabled) return;
+                    this.init();
+                    if (!this.ctx) return;
+                    try {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(160, this.ctx.currentTime);
+                        gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+                        gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
+                        osc.start();
+                        osc.stop(this.ctx.currentTime + 0.15);
+                    } catch(e) {}
+                }
+
+                playFanfare() {
+                    if (!this.enabled) return;
+                    this.init();
+                    if (!this.ctx) return;
+                    try {
+                        const notes = [523.25, 659.25, 783.99, 1046.50];
+                        notes.forEach((freq, i) => {
+                            const osc = this.ctx.createOscillator();
+                            const gain = this.ctx.createGain();
+                            osc.connect(gain);
+                            gain.connect(this.ctx.destination);
+                            osc.type = 'triangle';
+                            osc.frequency.setValueAtTime(freq, this.ctx.currentTime + i * 0.1);
+                            gain.gain.setValueAtTime(0.15, this.ctx.currentTime + i * 0.1);
+                            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + i * 0.1 + 0.3);
+                            osc.start(this.ctx.currentTime + i * 0.1);
+                            osc.stop(this.ctx.currentTime + i * 0.1 + 0.3);
+                        });
+                    } catch(e) {}
+                }
+            }
+
+            const sounds = new KidsSoundSystem();
+
+            // --- DOM ELEMENTS ---
+            const typingInput = document.getElementById('typing-input');
+            const textTarget = document.getElementById('text-target');
+            const clickFocusMask = document.getElementById('click-focus-mask');
+            const startMissionBtn = document.getElementById('start-mission-btn');
+            const spaceship = document.getElementById('spaceship');
+
+            const statTime = document.getElementById('stat-time');
+            const statWpm = document.getElementById('stat-wpm');
+            const statCombo = document.getElementById('stat-combo');
+            const statAccuracy = document.getElementById('stat-accuracy');
+
+            const kidsResultModal = document.getElementById('kids-result-modal');
+            const modalWpmVal = document.getElementById('modal-wpm-val');
+            const modalAccVal = document.getElementById('modal-acc-val');
+            const modalStarsVal = document.getElementById('modal-stars-val');
+            const modalTitle = document.getElementById('modal-title');
+            const modalAvatar = document.getElementById('modal-avatar');
+            const kidNameInput = document.getElementById('kid-name-input');
+
+            const typingHint = document.getElementById('typing-hint');
+            const resetGameBtn = document.getElementById('reset-game-btn');
+            const playAgainBtn = document.getElementById('play-again-btn');
+            const printCertificateBtn = document.getElementById('print-certificate-btn');
+            const downloadTxtReport = document.getElementById('download-txt-report');
+            const soundBtn = document.getElementById('sound-btn');
+            const soundIcon = document.getElementById('sound-icon');
+            const keyboardToggleBtn = document.getElementById('keyboard-toggle-btn');
+            const keyboardWrapper = document.getElementById('keyboard-wrapper');
+            const customTimeInput = document.getElementById('custom-time');
+
+            // Custom Text & JSON Elements
+            const customTextPanel = document.getElementById('custom-text-panel');
+            const customTextInput = document.getElementById('custom-text-input');
+            const exportJsonBtn = document.getElementById('export-json-btn');
+            const importJsonBtn = document.getElementById('import-json-btn');
+            const jsonFileInput = document.getElementById('json-file-input');
+
+            // --- GAME STATE ---
+            let currentLevel = 'easy';
+            let initialTime = 30;
+            let timeRemaining = 30;
+            let timerInterval = null;
+            let isPlaying = false;
+
+            let targetText = "";
+            let typedText = "";
+            let totalCorrectChars = 0;
+            let totalTypedKeys = 0;
+            let totalErrorKeys = 0;
+            let currentCombo = 0;
+            let maxCombo = 0;
+            let totalLetters = 0, totalWords = 0, lastResult = null;
+
+            function analyze(typed, target) {
+                let letters = 0, words = 0, pos = 0;
+                target.split(' ').forEach(w => {
+                    let ok = true;
+                    for (let i = 0; i < w.length; i++) {
+                        if (typed[pos + i] === w[i]) letters++; else ok = false;
+                    }
+                    if (ok && pos + w.length <= typed.length) words++;
+                    pos += w.length + 1;
+                });
+                return { letters, words };
+            }
+
+            const maskSub = document.getElementById('mask-sub');
+            function showIdle() {
+                startMissionBtn.textContent = '▶️ INIZIO';
+                if (maskSub) maskSub.textContent = 'Premi INIZIO per cominciare una nuova partita!';
+                clickFocusMask.classList.remove('hidden');
+            }
+
+            function newGame() {
+                initGame();
+                sounds.init();
+                clickFocusMask.classList.add('hidden');
+                typingInput.focus();
+                startGame();
+            }
+
+            function parseCustomText() {
+                const raw = customTextInput ? customTextInput.value.trim() : "";
+                if (!raw) {
+                    return ["Scrivi il tuo testo personalizzato nel pannello delle impostazioni!"];
+                }
+                const lines = raw.split(/[\n\.\?!]+/).map(s => s.trim()).filter(s => s.length > 0);
+                return lines.length > 0 ? lines : [raw];
+            }
+
+            function getNextTarget() {
+                if (currentLevel === 'custom') {
+                    if (customPhrases.length === 0) {
+                        customPhrases = parseCustomText();
+                        customPhraseIndex = 0;
+                    }
+                    if (customPhraseIndex >= customPhrases.length) {
+                        return null; // Signals custom text exercise is completed
+                    }
+                    const text = customPhrases[customPhraseIndex];
+                    customPhraseIndex++;
+                    return text;
+                }
+
+                const bank = CONTENT_BANKS[currentLevel] || CONTENT_BANKS.easy;
+                if (currentLevel === 'easy') {
+                    let lineLetters = [];
+                    for (let i = 0; i < 6; i++) {
+                        lineLetters.push(bank[Math.floor(Math.random() * bank.length)]);
+                    }
+                    return lineLetters.join(' ');
+                } else {
+                    return bank[Math.floor(Math.random() * bank.length)];
+                }
+            }
+
+            function initGame() {
+                totalLetters = 0; totalWords = 0;
+                if (timerInterval) clearInterval(timerInterval);
+                isPlaying = false;
+                timeRemaining = initialTime;
+                typedText = "";
+                totalCorrectChars = 0;
+                totalTypedKeys = 0;
+                totalErrorKeys = 0;
+                currentCombo = 0;
+                maxCombo = 0;
+
+                if (currentLevel === 'custom') {
+                    customPhrases = parseCustomText();
+                    customPhraseIndex = 0;
+                }
+
+                targetText = getNextTarget() || "";
+                if (typingInput) typingInput.value = "";
+
+                if (statTime) statTime.textContent = `${timeRemaining}s`;
+                if (statWpm) statWpm.textContent = "0";
+                if (statCombo) statCombo.textContent = "x0";
+                if (statAccuracy) statAccuracy.textContent = "100%";
+                if (spaceship) spaceship.style.left = "0%";
+
+                renderTargetText();
+                updateKeyboardGuide();
+
+                if (kidsResultModal) {
+                    kidsResultModal.classList.add('hidden');
+                    kidsResultModal.classList.remove('opacity-100');
+                }
+            }
+
+            function loadNextTarget() {
+                const a = analyze(typedText, targetText);
+                totalLetters += a.letters; totalWords += a.words;
+                for (let i = 0; i < typedText.length; i++) {
+                    if (typedText[i] === targetText[i]) {
+                        totalCorrectChars++;
+                    }
+                }
+                typedText = "";
+                
+                const next = getNextTarget();
+                if (next === null) {
+                    // Custom level text is completely written! Finish game immediately.
+                    endGame();
+                    return;
+                }
+
+                targetText = next;
+                if (typingInput) typingInput.value = "";
+                if (spaceship) spaceship.style.left = "0%";
+                renderTargetText();
+                updateKeyboardGuide();
+            }
+
+            function renderTargetText() {
+                if (!textTarget) return;
+                textTarget.innerHTML = "";
+                const chars = targetText.split('');
+
+                chars.forEach((char, index) => {
+                    const span = document.createElement('span');
+                    span.textContent = char === ' ' ? '␣' : char;
+                    span.className = "px-0.5 rounded transition-colors duration-100";
+
+                    if (index < typedText.length) {
+                        if (typedText[index] === char) {
+                            span.classList.add('text-neon-green', 'bg-green-950/40');
+                        } else {
+                            span.classList.add('text-neon-pink', 'bg-pink-950/80', 'underline');
+                        }
+                    } else if (index === typedText.length) {
+                        span.classList.add('text-neon-yellow', 'bg-purple-800', 'animate-pulse');
+                    } else {
+                        span.classList.add('text-purple-300/60');
+                    }
+
+                    textTarget.appendChild(span);
+                });
+            }
+
+            function startGame() {
+                if (isPlaying) return;
+                isPlaying = true;
+                sounds.init();
+
+                timerInterval = setInterval(() => {
+                    timeRemaining--;
+                    if (statTime) statTime.textContent = `${timeRemaining}s`;
+
+                    updateLiveStats();
+
+                    if (timeRemaining <= 0) {
+                        endGame();
+                    }
+                }, 1000);
+            }
+
+            function updateLiveStats() {
+                const timeElapsed = initialTime - timeRemaining;
+                if (timeElapsed <= 0) return;
+
+                let currentWordCorrect = 0;
+                for (let i = 0; i < typedText.length; i++) {
+                    if (typedText[i] === targetText[i]) currentWordCorrect++;
+                }
+
+                const overallCorrect = totalCorrectChars + currentWordCorrect;
+                const wpm = Math.round(((overallCorrect / 5) / timeElapsed) * 60) || 0;
+                const accuracy = totalTypedKeys > 0
+                    ? Math.max(0, Math.round(((totalTypedKeys - totalErrorKeys) / totalTypedKeys) * 100))
+                    : 100;
+
+                if (statWpm) statWpm.textContent = wpm;
+                if (statAccuracy) statAccuracy.textContent = `${accuracy}%`;
+
+                if (spaceship) {
+                    const progress = Math.min(100, Math.round((typedText.length / Math.max(1, targetText.length)) * 85));
+                    spaceship.style.left = `${progress}%`;
+                }
+            }
+
+            function endGame() {
+                if (timerInterval) clearInterval(timerInterval);
+                isPlaying = false;
+                sounds.playFanfare();
+
+                const timeElapsed = Math.max(1, initialTime - timeRemaining);
+
+                let currentWordCorrect = 0;
+                for (let i = 0; i < typedText.length; i++) {
+                    if (typedText[i] === targetText[i]) currentWordCorrect++;
+                }
+
+                const overallCorrect = totalCorrectChars + currentWordCorrect;
+                const finalWpm = Math.round(((overallCorrect / 5) / timeElapsed) * 60) || 0;
+                const finalAcc = totalTypedKeys > 0
+                    ? Math.max(0, Math.round(((totalTypedKeys - totalErrorKeys) / totalTypedKeys) * 100))
+                    : 100;
+
+                let stars = "⭐☆☆";
+                let title = "Buon Inizio! 🐣";
+                let avatar = "🚀";
+                if (finalWpm >= 20 && finalAcc >= 85) {
+                    stars = "⭐⭐⭐";
+                    title = "Super Campione Spaziale! 🏆";
+                    avatar = "👑";
+                } else if (finalWpm >= 10 && finalAcc >= 70) {
+                    stars = "⭐⭐☆";
+                    title = "Pilota Esperto! 🌟";
+                    avatar = "🛸";
+                }
+
+                const tail = analyze(typedText, targetText);
+                const finalLetters = totalLetters + tail.letters;
+                const finalWords = totalWords + tail.words;
+                lastResult = { wpm: finalWpm, acc: `${finalAcc}%`, stars, letters: finalLetters, words: finalWords,
+                               keys: totalTypedKeys, errors: totalErrorKeys, time: timeElapsed, level: currentLevel };
+                document.getElementById('modal-letters-val').textContent = finalLetters;
+                document.getElementById('modal-words-val').textContent = finalWords;
+                document.getElementById('modal-time-val').textContent = `${timeElapsed}s`;
+                if (modalWpmVal) modalWpmVal.textContent = finalWpm;
+                if (modalAccVal) modalAccVal.textContent = `${finalAcc}%`;
+                if (modalStarsVal) modalStarsVal.textContent = stars;
+                if (modalTitle) modalTitle.textContent = title;
+                if (modalAvatar) modalAvatar.textContent = avatar;
+
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+                }
+
+                if (kidsResultModal) {
+                    kidsResultModal.classList.remove('hidden');
+                    setTimeout(() => kidsResultModal.classList.add('opacity-100'), 10);
+                }
+            }
+
+            function updateKeyboardGuide() {
+                document.querySelectorAll('.key-btn').forEach(k => k.classList.remove('key-active'));
+
+                if (typedText.length < targetText.length) {
+                    const nextChar = targetText[typedText.length].toLowerCase();
+                    let keySelector = nextChar;
+                    if (nextChar === ' ') keySelector = ' ';
+
+                    try {
+                        const activeKeyEl = document.querySelector(`.key-btn[data-key="${CSS.escape(keySelector)}"]`);
+                        if (activeKeyEl) {
+                            activeKeyEl.classList.add('key-active');
+                            if (typingHint) {
+                                typingHint.textContent = `Premi "${nextChar === ' ' ? 'Barra Spazio' : nextChar.toUpperCase()}"!`;
+                            }
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            // --- INPUT & EVENT LISTENERS ---
+            window.addEventListener('keydown', (e) => {
+                if (isPlaying && typingInput && document.activeElement !== typingInput && document.activeElement !== customTextInput && document.activeElement !== kidNameInput && document.activeElement !== pilotFirstName && document.activeElement !== pilotLastName && e.key.length === 1) {
+                    typingInput.focus();
+                }
+            });
+
+            if (typingInput) {
+                typingInput.addEventListener('input', () => {
+                    if (!isPlaying) { typingInput.value = ""; return; }
+
+                    const currentVal = typingInput.value;
+                    if (currentVal.length > typedText.length) {
+                        totalTypedKeys++;
+                        const lastIdx = currentVal.length - 1;
+
+                        if (currentVal[lastIdx] !== targetText[lastIdx]) {
+                            totalErrorKeys++;
+                            currentCombo = 0;
+                            sounds.playError();
+                        } else {
+                            currentCombo++;
+                            if (currentCombo > maxCombo) maxCombo = currentCombo;
+                            sounds.playPop();
+                        }
+                    }
+
+                    typedText = currentVal;
+                    if (statCombo) statCombo.textContent = `x${currentCombo}`;
+                    renderTargetText();
+                    updateKeyboardGuide();
+                    updateLiveStats();
+
+                    if (typedText.length >= targetText.length) {
+                        loadNextTarget();
+                    }
+                });
+            }
+
+            if (clickFocusMask) {
+                clickFocusMask.addEventListener('click', () => { if (isPlaying) typingInput.focus(); else newGame(); });
+            }
+
+            if (typingInput) {
+                typingInput.addEventListener('blur', () => {
+                    if (isPlaying && clickFocusMask) {
+                        startMissionBtn.textContent = '▶️ CONTINUA';
+                        if (maskSub) maskSub.textContent = 'Clicca per continuare a giocare!';
+                        clickFocusMask.classList.remove('hidden');
+                    }
+                });
+                typingInput.addEventListener('focus', () => {
+                    if (clickFocusMask) clickFocusMask.classList.add('hidden');
+                });
+            }
+
+            // --- DIFFICULTY SELECTOR (Including Custom Text Level) ---
+            function setLevelUI(level) {
+                currentLevel = level;
+                document.querySelectorAll('.level-btn').forEach(b => {
+                    if (b.dataset.level === level) {
+                        b.className = "level-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-neon-pink to-purple-600 text-white shadow-lg border-2 border-white/40 transition-all transform scale-105";
+                    } else {
+                        b.className = "level-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-purple-900/80 hover:bg-purple-800 text-purple-200 border-2 border-purple-700/50 transition-all";
+                    }
+                });
+
+                if (customTextPanel) {
+                    if (level === 'custom') {
+                        customTextPanel.classList.remove('hidden');
+                    } else {
+                        customTextPanel.classList.add('hidden');
+                    }
+                }
+            }
+
+            document.querySelectorAll('.level-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    setLevelUI(btn.dataset.level);
+                    initGame();
+                    showIdle();
+                });
+            });
+
+            if (customTextInput) {
+                customTextInput.addEventListener('input', () => {
+                    if (currentLevel === 'custom') {
+                        initGame();
+                        showIdle();
+                    }
+                });
+            }
+
+            // --- TIMER SELECTOR ---
+            function setTimerUI(timeSeconds) {
+                initialTime = parseInt(timeSeconds);
+                document.querySelectorAll('.time-btn').forEach(b => {
+                    if (parseInt(b.dataset.time) === initialTime) {
+                        b.className = "time-btn active px-3 py-1.5 rounded-xl text-sm font-bold bg-gradient-to-r from-neon-cyan to-blue-600 text-slate-900 shadow-lg border-2 border-white/40 transition-all";
+                    } else {
+                        b.className = "time-btn px-3 py-1.5 rounded-xl text-sm font-bold bg-purple-900/80 hover:bg-purple-800 text-purple-200 border-2 border-purple-700/50 transition-all";
+                    }
+                });
+            }
+
+            document.querySelectorAll('.time-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (customTimeInput) customTimeInput.value = "";
+                    setTimerUI(btn.dataset.time);
+                    initGame();
+                    showIdle();
+                });
+            });
+
+            if (customTimeInput) {
+                customTimeInput.addEventListener('input', (e) => {
+                    const val = parseInt(e.target.value);
+                    if (val && val >= 5 && val <= 300) {
+                        document.querySelectorAll('.time-btn').forEach(b => {
+                            b.className = "time-btn px-3 py-1.5 rounded-xl text-sm font-bold bg-purple-900/80 hover:bg-purple-800 text-purple-200 border-2 border-purple-700/50 transition-all";
+                        });
+                        initialTime = val;
+                        initGame();
+                        showIdle();
+                    }
+                });
+            }
+
+            // --- EXPORT & IMPORT SETTINGS (JSON) ---
+            function exportSettingsJson() {
+                const config = {
+                    app: "SpaceTyperKids",
+                    version: "1.2",
+                    pilotName: pilotFullName,
+                    level: currentLevel,
+                    initialTime: initialTime,
+                    customText: customTextInput ? customTextInput.value : "",
+                    soundEnabled: sounds.enabled,
+                    timestamp: new Date().toISOString()
+                };
+
+                const jsonStr = JSON.stringify(config, null, 2);
+                const blob = new Blob([jsonStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `SpaceTyper_Config_${currentLevel}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+
+            if (exportJsonBtn) {
+                exportJsonBtn.addEventListener('click', exportSettingsJson);
+            }
+
+            if (importJsonBtn && jsonFileInput) {
+                importJsonBtn.addEventListener('click', () => {
+                    jsonFileInput.click();
+                });
+
+                jsonFileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        try {
+                            const config = JSON.parse(event.target.result);
+                            if (config.pilotName) {
+                                pilotFullName = config.pilotName;
+                                if (navPilotName) navPilotName.textContent = pilotFullName;
+                                if (kidNameInput) kidNameInput.value = pilotFullName;
+                            }
+                            if (config.level) {
+                                setLevelUI(config.level);
+                            }
+                            if (config.initialTime) {
+                                setTimerUI(config.initialTime);
+                            }
+                            if (config.customText !== undefined && customTextInput) {
+                                customTextInput.value = config.customText;
+                            }
+                            if (config.soundEnabled !== undefined) {
+                                sounds.enabled = config.soundEnabled;
+                                if (soundIcon) soundIcon.textContent = sounds.enabled ? "🔊" : "🔇";
+                            }
+                            initGame();
+                            showIdle();
+                        } catch (err) {
+                            alert("Impossibile leggere il file JSON. Assicurati che sia un file di configurazione valido!");
+                        }
+                    };
+                    reader.readAsText(file);
+                    jsonFileInput.value = "";
+                });
+            }
+
+            // --- TOGGLES & BUTTONS ---
+            if (soundBtn) {
+                soundBtn.addEventListener('click', () => {
+                    sounds.enabled = !sounds.enabled;
+                    if (soundIcon) soundIcon.textContent = sounds.enabled ? "🔊" : "🔇";
+                });
+            }
+
+            if (keyboardToggleBtn && keyboardWrapper) {
+                keyboardToggleBtn.addEventListener('click', () => {
+                    keyboardWrapper.classList.toggle('hidden');
+                });
+            }
+
+            if (resetGameBtn) resetGameBtn.addEventListener('click', () => { initGame(); showIdle(); });
+            if (playAgainBtn) playAgainBtn.addEventListener('click', () => { initGame(); showIdle(); });
+
+            // --- PRINT & DOWNLOAD REPORT ---
+            if (printCertificateBtn) {
+                printCertificateBtn.addEventListener('click', () => {
+                    const kidName = (kidNameInput ? kidNameInput.value.trim() : "") || pilotFullName || "Super Pilota";
+                    const certKidName = document.getElementById('cert-kid-name');
+                    const certWpm = document.getElementById('cert-wpm');
+                    const certAcc = document.getElementById('cert-acc');
+                    const certStars = document.getElementById('cert-stars');
+                    const certDate = document.getElementById('cert-date');
+
+                    if (certKidName) certKidName.textContent = kidName.toUpperCase();
+                    if (certWpm && modalWpmVal) certWpm.textContent = `${modalWpmVal.textContent} WPM`;
+                    if (certAcc && modalAccVal) certAcc.textContent = modalAccVal.textContent;
+                    if (certStars && modalStarsVal) certStars.textContent = modalStarsVal.textContent;
+                    if (certDate) certDate.textContent = new Date().toLocaleDateString('it-IT');
+                    if (lastResult) {
+                        document.getElementById('cert-time').textContent = lastResult.time;
+                        document.getElementById('cert-letters').textContent = lastResult.letters;
+                        document.getElementById('cert-words').textContent = lastResult.words;
+                    }
+
+                    window.print();
+                });
+            }
+
+            if (downloadTxtReport) {
+                downloadTxtReport.addEventListener('click', () => {
+                    const kidName = (kidNameInput ? kidNameInput.value.trim() : "") || pilotFullName || "Super Pilota";
+                    const wpm = modalWpmVal ? modalWpmVal.textContent : "0";
+                    const acc = modalAccVal ? modalAccVal.textContent : "100%";
+                    const stars = modalStarsVal ? modalStarsVal.textContent : "⭐";
+
+                    const report = `======================================\n` +
+                                   `   SPACE TYPER KIDS - DIPLOMA REPORT  \n` +
+                                   `======================================\n` +
+                                   `Nome Pilota: ${kidName}\n` +
+                                   `Data: ${new Date().toLocaleDateString('it-IT')}\n` +
+                                   `Livello: ${(lastResult ? lastResult.level : currentLevel).toUpperCase()}\n` +
+                                   `Durata partita: ${lastResult ? lastResult.time : initialTime} secondi\n\n` +
+                                   `RISULTATI:\n` +
+                                   `- Lettere corrette scritte: ${lastResult ? lastResult.letters : 0}\n` +
+                                   `- Parole completate: ${lastResult ? lastResult.words : 0}\n` +
+                                   `- Tasti premuti: ${lastResult ? lastResult.keys : 0} (errori: ${lastResult ? lastResult.errors : 0})\n` +
+                                   `- Velocita WPM: ${wpm}\n` +
+                                   `- Precisione: ${acc}\n` +
+                                   `- Valutazione: ${stars}\n\n` +
+                                   `Continua a volare alto sulla tastiera!\n` +
+                                   `======================================`;
+
+                    const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `SpaceTyper_Report_${kidName.replace(/\s+/g, '_')}.txt`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
