@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio Verbo Essere e Avere - LearningApps</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Fredoka & Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                        display: ['Fredoka', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #fffbeb;
+            background-image:
+                radial-gradient(circle at 12% 15%, rgba(251, 191, 36, 0.22) 0%, transparent 28%),
+                radial-gradient(circle at 88% 18%, rgba(56, 189, 248, 0.22) 0%, transparent 30%),
+                radial-gradient(circle at 82% 85%, rgba(167, 139, 250, 0.20) 0%, transparent 32%),
+                radial-gradient(circle at 18% 82%, rgba(52, 211, 153, 0.20) 0%, transparent 28%);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .font-display {
+            font-family: 'Fredoka', 'Nunito', sans-serif;
+        }
+
+        .kids-bg-decor {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bubble-puff {
+            position: absolute;
+            border-radius: 9999px;
+            opacity: 0.45;
+            animation: floatSlow 7s ease-in-out infinite;
+        }
+
+        .bubble-puff::before,
+        .bubble-puff::after {
+            content: '';
+            position: absolute;
+            background: inherit;
+            border-radius: 9999px;
+        }
+
+        .bubble-puff::before {
+            width: 55%;
+            height: 55%;
+            top: -25%;
+            left: 14%;
+        }
+
+        .bubble-puff::after {
+            width: 45%;
+            height: 45%;
+            top: -15%;
+            right: 12%;
+        }
+
+        .puff-1 { width: 110px; height: 42px; top: 9%; left: 5%; background: #bae6fd; animation-delay: 0s; }
+        .puff-2 { width: 130px; height: 48px; top: 16%; right: 6%; background: #fde68a; animation-delay: 1.8s; }
+        .puff-3 { width: 95px; height: 36px; bottom: 12%; left: 8%; background: #ddd6fe; animation-delay: 3.2s; }
+        .puff-4 { width: 115px; height: 44px; bottom: 10%; right: 7%; background: #a7f3d0; animation-delay: 4.5s; }
+
+        .star-dot {
+            position: absolute;
+            font-size: 1.15rem;
+            opacity: 0.35;
+            animation: wiggleStar 5s ease-in-out infinite;
+        }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-9px); }
+        }
+
+        @keyframes wiggleStar {
+            0%, 100% { transform: rotate(-6deg) scale(1); }
+            50% { transform: rotate(8deg) scale(1.12); }
+        }
+
+        .sticker-btn {
+            transition: transform 0.14s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.14s ease, filter 0.15s ease;
+        }
+        .sticker-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+        .sticker-btn:active:not(:disabled) {
+            transform: translateY(2px);
+        }
+
+        .sticker-card {
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+        }
+        .sticker-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .app-iframe-container {
+            width: 100%;
+            height: 600px;
+            background-color: #ffffff;
+            border-radius: 1.25rem;
+            overflow: hidden;
+            border: 3px solid #e2e8f0;
+            box-shadow: inset 0 2px 6px 0 rgba(0, 0, 0, 0.06);
+        }
+        .app-iframe-container iframe {
+            width: 100% !important;
+            height: 600px !important;
+            border: 0 !important;
+            display: block;
+        }
+        @media (max-width: 768px) {
+            .app-iframe-container, .app-iframe-container iframe {
+                height: 480px !important;
+            }
+            .bubble-puff {
+                display: none;
+            }
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printable-report, #printable-report * {
+                visibility: visible;
+            }
+            #printable-report {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white;
+                color: black;
+                padding: 20px;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen text-slate-800 flex flex-col">
+
+    <!-- Decorazioni giocose di sfondo -->
+    <div class="kids-bg-decor no-print" aria-hidden="true">
+        <div class="bubble-puff puff-1"></div>
+        <div class="bubble-puff puff-2"></div>
+        <div class="bubble-puff puff-3"></div>
+        <div class="bubble-puff puff-4"></div>
+        <span class="star-dot text-amber-400" style="top: 28%; left: 14%; animation-delay: 0.4s;"><i class="fa-solid fa-star"></i></span>
+        <span class="star-dot text-sky-400" style="top: 34%; right: 15%; animation-delay: 1.5s;"><i class="fa-solid fa-sparkles"></i></span>
+        <span class="star-dot text-pink-400" style="bottom: 24%; left: 18%; animation-delay: 2.6s;"><i class="fa-solid fa-star"></i></span>
+        <span class="star-dot text-emerald-400" style="bottom: 28%; right: 14%; animation-delay: 3.4s;"><i class="fa-solid fa-sparkles"></i></span>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="bg-white/95 backdrop-blur-md border-b-4 border-amber-200 sticky top-0 z-30 shadow-sm no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-2 flex items-center justify-between gap-2">
+            <div class="flex items-center space-x-3 cursor-pointer group" onclick="goHomeIfSessionActive()">
+                <div class="bg-gradient-to-br from-amber-400 to-orange-500 text-white p-2.5 rounded-2xl border-2 border-orange-600 shadow-[0_4px_0_#c2410c] group-hover:rotate-3 transition-transform">
+                    <i class="fa-solid fa-wand-magic-sparkles text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg sm:text-xl text-slate-900 leading-tight">Laboratorio di Italiano</h1>
+                    <p class="text-xs font-semibold text-sky-600">Verbo Essere e Avere • Indicativo Presente</p>
+                </div>
+            </div>
+
+            <!-- Header Controls -->
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <span id="student-badge" class="hidden text-xs bg-emerald-100 text-emerald-900 font-extrabold px-3.5 py-1.5 rounded-full border-2 border-emerald-300 shadow-[0_2px_0_#6ee7b7] items-center">
+                    <i class="fa-solid fa-face-smile-beam text-emerald-600 mr-1.5 text-sm"></i> <span id="badge-student-name">Alunno</span>
+                </span>
+                
+                <button id="btn-toggle-teacher" onclick="openTeacherAuthModal()" class="sticker-btn text-xs font-extrabold bg-violet-100 hover:bg-violet-200 text-violet-800 px-3.5 py-2 rounded-2xl flex items-center gap-1.5 border-2 border-violet-300 shadow-[0_3px_0_#c4b5fd]">
+                    <i class="fa-solid fa-user-lock"></i> <span>Area Docente</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="relative z-10 flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- SECTION 1: Student Login / Registration -->
+        <section id="section-login" class="max-w-md mx-auto my-8 sm:my-12 bg-white rounded-[2rem] shadow-[0_10px_0_#fde68a,0_18px_30px_rgba(15,23,42,0.08)] border-4 border-amber-300 overflow-hidden">
+            <div class="bg-gradient-to-br from-sky-400 via-sky-500 to-indigo-500 p-7 text-white text-center relative">
+                <div class="w-16 h-16 bg-amber-300 text-amber-950 rounded-2xl border-2 border-amber-500 flex items-center justify-center mx-auto mb-3 shadow-[0_4px_0_#d97706] -rotate-3">
+                    <i class="fa-solid fa-rocket text-3xl"></i>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-bold tracking-wide">Ciao! Pronti a giocare?</h2>
+                <p class="text-sky-50 text-sm font-semibold mt-1">Scrivi i tuoi dati per iniziare l'avventura!</p>
+            </div>
+            
+            <form id="form-login" onsubmit="startStudentSession(event)" class="p-6 space-y-4">
+                <div>
+                    <label for="input-nome" class="block text-xs font-extrabold text-sky-700 uppercase tracking-wider mb-1">
+                        <i class="fa-solid fa-star text-amber-400 mr-1"></i> Nome
+                    </label>
+                    <input type="text" id="input-nome" required placeholder="Es. Mario" class="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 bg-slate-50/70 focus:bg-white focus:ring-4 focus:ring-sky-200 focus:border-sky-500 outline-none transition-all font-semibold">
+                </div>
+                <div>
+                    <label for="input-cognome" class="block text-xs font-extrabold text-sky-700 uppercase tracking-wider mb-1">
+                        <i class="fa-solid fa-star text-amber-400 mr-1"></i> Cognome
+                    </label>
+                    <input type="text" id="input-cognome" required placeholder="Es. Rossi" class="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 bg-slate-50/70 focus:bg-white focus:ring-4 focus:ring-sky-200 focus:border-sky-500 outline-none transition-all font-semibold">
+                </div>
+                <div>
+                    <label for="input-classe" class="block text-xs font-extrabold text-sky-700 uppercase tracking-wider mb-1">
+                        <i class="fa-solid fa-star text-amber-400 mr-1"></i> Classe
+                    </label>
+                    <input type="text" id="input-classe" required placeholder="Es. 1A" class="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 bg-slate-50/70 focus:bg-white focus:ring-4 focus:ring-sky-200 focus:border-sky-500 outline-none transition-all font-semibold">
+                </div>
+
+                <div class="pt-3">
+                    <button type="submit" class="sticker-btn w-full bg-gradient-to-b from-emerald-400 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-white font-display font-bold text-lg py-3.5 rounded-2xl border-2 border-emerald-600 shadow-[0_5px_0_#047857] flex items-center justify-center gap-2">
+                        <span>Inizia gli Esercizi</span>
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- SECTION 2: Student Dashboard & Selection -->
+        <section id="section-workspace" class="hidden space-y-6">
+            
+            <!-- Dashboard Navigation / Header Bar -->
+            <div class="bg-white p-4 rounded-3xl border-3 border-sky-200 shadow-[0_5px_0_#bae6fd] flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex flex-wrap items-center gap-3">
+                    <button onclick="showSelectionGrid()" class="sticker-btn bg-sky-100 hover:bg-sky-200 text-sky-900 text-xs font-extrabold px-4 py-2.5 rounded-2xl border-2 border-sky-300 shadow-[0_3px_0_#7dd3fc] flex items-center gap-2">
+                        <i class="fa-solid fa-shapes"></i> <span>Torna alla Selezione Esercizi</span>
+                    </button>
+                    <span id="nav-mode-indicator" class="text-xs bg-sky-50 text-sky-700 border border-sky-200 px-3 py-1 rounded-full font-bold">
+                        Modalità Libera
+                    </span>
+                </div>
+
+                <!-- Session Actions / Timer -->
+                <div class="flex flex-wrap items-center gap-2.5 w-full md:w-auto justify-end">
+                    <div id="timer-box" class="hidden bg-amber-100 border-2 border-amber-400 text-amber-900 px-3.5 py-1.5 rounded-2xl font-mono font-extrabold text-sm shadow-[0_3px_0_#f59e0b] flex items-center gap-2">
+                        <i class="fa-regular fa-clock animate-bounce text-amber-600"></i>
+                        <span id="timer-display">00:00</span>
+                    </div>
+
+                    <button onclick="showReportTab()" class="sticker-btn bg-purple-100 hover:bg-purple-200 text-purple-900 border-2 border-purple-300 shadow-[0_3px_0_#c4b5fd] font-extrabold px-4 py-2 rounded-2xl text-xs flex items-center gap-2">
+                        <i class="fa-solid fa-trophy text-amber-500"></i>
+                        <span>Vedi Report Finale</span>
+                    </button>
+
+                    <button onclick="stopSessionPrompt()" class="sticker-btn bg-rose-100 hover:bg-rose-200 text-rose-800 border-2 border-rose-300 shadow-[0_3px_0_#fda4af] font-extrabold px-4 py-2 rounded-2xl text-xs flex items-center gap-2">
+                        <i class="fa-solid fa-hand"></i>
+                        <span>STOP Prova</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- VIEW A: EXERCISE SELECTION GRID -->
+            <div id="exercise-selection-grid" class="space-y-5">
+                <div class="bg-gradient-to-r from-sky-400 via-sky-500 to-purple-500 p-6 sm:p-7 rounded-[2rem] text-white border-3 border-sky-600 shadow-[0_6px_0_#0369a1] relative overflow-hidden">
+                    <div class="relative z-10">
+                        <span class="inline-block bg-amber-300 text-amber-950 font-extrabold text-xs px-3 py-1 rounded-full border border-amber-500 mb-2">
+                            <i class="fa-solid fa-sparkles mr-1"></i> Missione Grammatica
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-bold">Scegli l'Esercizio da svolgere</h2>
+                        <p class="text-sky-50 text-sm font-semibold mt-1">Clicca su una scheda colorata per aprire il gioco a schermo intero!</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="cards-container">
+                    <!-- Dynamic Exercise Cards rendered by JS -->
+                </div>
+            </div>
+
+            <!-- VIEW B: STATIC EMBEDDED IFRAMES CONTAINER -->
+            <div id="exercise-active-container" class="hidden space-y-4">
+                
+                <!-- APP 1 WRAPPER -->
+                <div id="exercise-wrapper-0" class="exercise-wrapper hidden bg-white rounded-[2rem] border-3 border-sky-300 shadow-[0_8px_0_#bae6fd] overflow-hidden">
+                    <div class="bg-gradient-to-r from-sky-50 to-amber-50 border-b-2 border-sky-200 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <button onclick="showSelectionGrid()" class="sticker-btn text-sky-700 hover:text-sky-900 bg-white p-2.5 rounded-2xl border-2 border-sky-300 shadow-[0_3px_0_#7dd3fc]">
+                                <i class="fa-solid fa-arrow-left"></i>
+                            </button>
+                            <span class="w-10 h-10 rounded-2xl bg-sky-500 text-white font-display font-bold text-lg flex items-center justify-center border-2 border-sky-700 shadow-[0_3px_0_#0369a1] shrink-0">1</span>
+                            <div>
+                                <span class="text-xs font-extrabold text-sky-600 uppercase tracking-wider block">Esercizio 1 di 4</span>
+                                <h2 class="text-xl font-bold text-slate-800 leading-tight">Essere o avere?</h2>
+                                <p class="text-xs font-semibold text-slate-600 mt-0.5">Distingui il verbo essere dal verbo avere</p>
+                            </div>
+                        </div>
+                        <div id="badge-app-0" class="flex items-center gap-2">
+                            <span class="bg-amber-100 text-amber-900 border-2 border-amber-300 text-xs px-3 py-1 rounded-full font-extrabold">In corso</span>
+                        </div>
+                    </div>
+                    <div class="p-3 sm:p-4 bg-sky-50/40">
+                        <div class="app-iframe-container">
+                            <iframe src="https://learningapps.org/watch?v=ppfde5tnk26" style="border:0px;width:100%;height:600px" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                        </div>
+                    </div>
+                    <div class="bg-white border-t-2 border-slate-100 p-4 flex items-center justify-between flex-wrap gap-3">
+                        <p class="text-xs font-semibold text-slate-600"><i class="fa-solid fa-circle-info text-sky-500 mr-1"></i> Completa l'esercizio su LearningApps, poi registra l'esito qui sotto.</p>
+                        <button onclick="openCompletionModal(0)" class="sticker-btn bg-gradient-to-b from-emerald-400 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-white font-extrabold px-6 py-2.5 rounded-2xl border-2 border-emerald-600 shadow-[0_4px_0_#047857] flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-circle-check"></i> <span>Concludi e Salva Esito</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- APP 2 WRAPPER -->
+                <div id="exercise-wrapper-1" class="exercise-wrapper hidden bg-white rounded-[2rem] border-3 border-amber-300 shadow-[0_8px_0_#fde68a] overflow-hidden">
+                    <div class="bg-gradient-to-r from-amber-50 to-orange-50 border-b-2 border-amber-200 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <button onclick="showSelectionGrid()" class="sticker-btn text-amber-800 hover:text-amber-950 bg-white p-2.5 rounded-2xl border-2 border-amber-300 shadow-[0_3px_0_#fcd34d]">
+                                <i class="fa-solid fa-arrow-left"></i>
+                            </button>
+                            <span class="w-10 h-10 rounded-2xl bg-amber-400 text-amber-950 font-display font-bold text-lg flex items-center justify-center border-2 border-amber-600 shadow-[0_3px_0_#d97706] shrink-0">2</span>
+                            <div>
+                                <span class="text-xs font-extrabold text-amber-700 uppercase tracking-wider block">Esercizio 2 di 4</span>
+                                <h2 class="text-xl font-bold text-slate-800 leading-tight">Indicativo presente Verbo Essere</h2>
+                                <p class="text-xs font-semibold text-slate-600 mt-0.5">Completa il testo inserendo il verbo essere coniugato in modo corretto.</p>
+                            </div>
+                        </div>
+                        <div id="badge-app-1" class="flex items-center gap-2">
+                            <span class="bg-amber-100 text-amber-900 border-2 border-amber-300 text-xs px-3 py-1 rounded-full font-extrabold">In corso</span>
+                        </div>
+                    </div>
+                    <div class="p-3 sm:p-4 bg-amber-50/40">
+                        <div class="app-iframe-container">
+                            <iframe src="https://learningapps.org/watch?v=p88nuwty226" style="border:0px;width:100%;height:600px" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                        </div>
+                    </div>
+                    <div class="bg-white border-t-2 border-slate-100 p-4 flex items-center justify-between flex-wrap gap-3">
+                        <p class="text-xs font-semibold text-slate-600"><i class="fa-solid fa-circle-info text-amber-500 mr-1"></i> Completa l'esercizio su LearningApps, poi registra l'esito qui sotto.</p>
+                        <button onclick="openCompletionModal(1)" class="sticker-btn bg-gradient-to-b from-emerald-400 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-white font-extrabold px-6 py-2.5 rounded-2xl border-2 border-emerald-600 shadow-[0_4px_0_#047857] flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-circle-check"></i> <span>Concludi e Salva Esito</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- APP 3 WRAPPER -->
+                <div id="exercise-wrapper-2" class="exercise-wrapper hidden bg-white rounded-[2rem] border-3 border-emerald-300 shadow-[0_8px_0_#a7f3d0] overflow-hidden">
+                    <div class="bg-gradient-to-r from-emerald-50 to-teal-50 border-b-2 border-emerald-200 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <button onclick="showSelectionGrid()" class="sticker-btn text-emerald-800 hover:text-emerald-950 bg-white p-2.5 rounded-2xl border-2 border-emerald-300 shadow-[0_3px_0_#6ee7b7]">
+                                <i class="fa-solid fa-arrow-left"></i>
+                            </button>
+                            <span class="w-10 h-10 rounded-2xl bg-emerald-500 text-white font-display font-bold text-lg flex items-center justify-center border-2 border-emerald-700 shadow-[0_3px_0_#047857] shrink-0">3</span>
+                            <div>
+                                <span class="text-xs font-extrabold text-emerald-700 uppercase tracking-wider block">Esercizio 3 di 4</span>
+                                <h2 class="text-xl font-bold text-slate-800 leading-tight">Indicativo presente Verbo Avere</h2>
+                                <p class="text-xs font-semibold text-slate-600 mt-0.5">Completa il testo inserendo il verbo avere coniugato in modo corretto.</p>
+                            </div>
+                        </div>
+                        <div id="badge-app-2" class="flex items-center gap-2">
+                            <span class="bg-amber-100 text-amber-900 border-2 border-amber-300 text-xs px-3 py-1 rounded-full font-extrabold">In corso</span>
+                        </div>
+                    </div>
+                    <div class="p-3 sm:p-4 bg-emerald-50/40">
+                        <div class="app-iframe-container">
+                            <iframe src="https://learningapps.org/watch?v=px5wa4k9t26" style="border:0px;width:100%;height:600px" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                        </div>
+                    </div>
+                    <div class="bg-white border-t-2 border-slate-100 p-4 flex items-center justify-between flex-wrap gap-3">
+                        <p class="text-xs font-semibold text-slate-600"><i class="fa-solid fa-circle-info text-emerald-500 mr-1"></i> Completa l'esercizio su LearningApps, poi registra l'esito qui sotto.</p>
+                        <button onclick="openCompletionModal(2)" class="sticker-btn bg-gradient-to-b from-emerald-400 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-white font-extrabold px-6 py-2.5 rounded-2xl border-2 border-emerald-600 shadow-[0_4px_0_#047857] flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-circle-check"></i> <span>Concludi e Salva Esito</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- APP 4 WRAPPER -->
+                <div id="exercise-wrapper-3" class="exercise-wrapper hidden bg-white rounded-[2rem] border-3 border-violet-300 shadow-[0_8px_0_#ddd6fe] overflow-hidden">
+                    <div class="bg-gradient-to-r from-violet-50 to-pink-50 border-b-2 border-violet-200 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <button onclick="showSelectionGrid()" class="sticker-btn text-violet-800 hover:text-violet-950 bg-white p-2.5 rounded-2xl border-2 border-violet-300 shadow-[0_3px_0_#c4b5fd]">
+                                <i class="fa-solid fa-arrow-left"></i>
+                            </button>
+                            <span class="w-10 h-10 rounded-2xl bg-violet-500 text-white font-display font-bold text-lg flex items-center justify-center border-2 border-violet-700 shadow-[0_3px_0_#6d28d9] shrink-0">4</span>
+                            <div>
+                                <span class="text-xs font-extrabold text-violet-700 uppercase tracking-wider block">Esercizio 4 di 4</span>
+                                <h2 class="text-xl font-bold text-slate-800 leading-tight">Indicativo presente Verbo Essere e Avere</h2>
+                                <p class="text-xs font-semibold text-slate-600 mt-0.5">Completa il testo scegliendo tra il verbo essere e avere; coniugali in modo corretto.</p>
+                            </div>
+                        </div>
+                        <div id="badge-app-3" class="flex items-center gap-2">
+                            <span class="bg-amber-100 text-amber-900 border-2 border-amber-300 text-xs px-3 py-1 rounded-full font-extrabold">In corso</span>
+                        </div>
+                    </div>
+                    <div class="p-3 sm:p-4 bg-violet-50/40">
+                        <div class="app-iframe-container">
+                            <iframe src="https://learningapps.org/watch?v=pc0guxekn26" style="border:0px;width:100%;height:600px" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                        </div>
+                    </div>
+                    <div class="bg-white border-t-2 border-slate-100 p-4 flex items-center justify-between flex-wrap gap-3">
+                        <p class="text-xs font-semibold text-slate-600"><i class="fa-solid fa-circle-info text-violet-500 mr-1"></i> Completa l'esercizio su LearningApps, poi registra l'esito qui sotto.</p>
+                        <button onclick="openCompletionModal(3)" class="sticker-btn bg-gradient-to-b from-emerald-400 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-white font-extrabold px-6 py-2.5 rounded-2xl border-2 border-emerald-600 shadow-[0_4px_0_#047857] flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-circle-check"></i> <span>Concludi e Salva Esito</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- VIEW C: FINAL REPORT -->
+            <div id="exercise-report-container" class="hidden space-y-6">
+                <div id="printable-report" class="bg-white rounded-[2rem] border-4 border-amber-300 shadow-[0_10px_0_#fde68a] p-6 sm:p-8 space-y-6">
+                    
+                    <!-- Report Header -->
+                    <div class="border-b-4 border-amber-100 pb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="bg-amber-100 text-amber-900 text-xs font-extrabold px-3 py-1 rounded-full border border-amber-300 uppercase tracking-wider">
+                                    <i class="fa-solid fa-award text-amber-600 mr-1"></i> Documento Ufficiale
+                                </span>
+                            </div>
+                            <h2 class="text-3xl font-bold text-slate-900">Report Finale Valutativo</h2>
+                            <p class="text-slate-600 text-sm font-semibold">Laboratorio Digitale Verbi Essere e Avere</p>
+                        </div>
+                        <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 text-xs space-y-1 min-w-[220px]">
+                            <div><strong class="text-slate-600">Alunno:</strong> <span id="report-student-fullname" class="font-bold text-slate-900"></span></div>
+                            <div><strong class="text-slate-600">Classe:</strong> <span id="report-student-class" class="font-bold text-slate-900"></span></div>
+                            <div><strong class="text-slate-600">Data e Ora:</strong> <span id="report-date" class="font-bold text-slate-900"></span></div>
+                            <div><strong class="text-slate-600">Durata Totale:</strong> <span id="report-total-duration" class="font-bold text-sky-700"></span></div>
+                        </div>
+                    </div>
+
+                    <!-- Pedagogical Objectives Summary -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-sky-50 border-2 border-sky-200 rounded-2xl p-4">
+                            <h4 class="text-xs font-extrabold text-sky-800 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                                <i class="fa-solid fa-bullseye text-sky-600"></i> Obiettivo Primario
+                            </h4>
+                            <p class="text-xs font-bold text-slate-800 leading-relaxed">
+                                Imparare ad usare correttamente il verbo essere e avere, e coniugarli all'indicativo presente adeguatamente.
+                            </p>
+                        </div>
+                        <div class="bg-purple-50 border-2 border-purple-200 rounded-2xl p-4">
+                            <h4 class="text-xs font-extrabold text-purple-800 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                                <i class="fa-solid fa-graduation-cap text-purple-600"></i> Obiettivo Secondario
+                            </h4>
+                            <p class="text-xs font-bold text-slate-800 leading-relaxed">
+                                Migliorare l'italiano e la costruzione grammaticale della frase.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Results Table -->
+                    <div class="overflow-x-auto rounded-2xl border-2 border-slate-200">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-slate-100 text-slate-700 font-extrabold uppercase text-xs">
+                                <tr>
+                                    <th class="p-3.5 border-b">Esercizio</th>
+                                    <th class="p-3.5 border-b">Durata</th>
+                                    <th class="p-3.5 border-b">Esito / Punteggio</th>
+                                    <th class="p-3.5 border-b">Obiettivo Primario</th>
+                                    <th class="p-3.5 border-b">Obiettivo Secondario</th>
+                                </tr>
+                            </thead>
+                            <tbody id="report-table-body" class="divide-y divide-slate-200 font-semibold text-slate-800">
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Report Footer / Teacher signature block -->
+                    <div class="pt-4 border-t-2 border-slate-100 flex flex-col sm:flex-row justify-between items-end gap-6 text-xs text-slate-500">
+                        <div>
+                            <p class="font-bold text-slate-700">Valutazione Globale Docente:</p>
+                            <p class="text-slate-500 italic mt-0.5">Sessione registrata dal sistema didattico.</p>
+                        </div>
+                        <div class="text-right border-t border-slate-300 pt-2 min-w-[200px]">
+                            <p class="font-bold text-slate-700">Firma Docente</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Print Action Button -->
+                <div class="flex justify-center gap-3 no-print">
+                    <button onclick="window.print()" class="sticker-btn bg-gradient-to-b from-sky-400 to-sky-500 hover:from-sky-500 hover:to-sky-600 text-white font-extrabold px-6 py-3 rounded-2xl border-2 border-sky-700 shadow-[0_4px_0_#0369a1] text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-print"></i> <span>Stampa o Salva Report in PDF</span>
+                    </button>
+                    <button onclick="showSelectionGrid()" class="sticker-btn bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold px-6 py-3 rounded-2xl border-2 border-slate-300 shadow-[0_4px_0_#cbd5e1] text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> <span>Torna agli Esercizi</span>
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Modal 1: Teacher Authentication -->
+    <div id="modal-teacher-auth" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-[2rem] border-4 border-violet-300 shadow-2xl max-w-sm w-full overflow-hidden p-6 space-y-4">
+            <div class="text-center">
+                <div class="w-12 h-12 bg-violet-100 text-violet-700 rounded-2xl flex items-center justify-center mx-auto mb-2 text-xl font-bold border-2 border-violet-300">
+                    <i class="fa-solid fa-key"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900">Accesso Area Docente</h3>
+                <p class="text-xs font-semibold text-slate-500">Inserisci la password per gestire le impostazioni</p>
+            </div>
+            
+            <form onsubmit="handleTeacherLogin(event)" class="space-y-3">
+                <div>
+                    <input type="password" id="teacher-password-input" required placeholder="Password (default: docente123)" class="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 bg-slate-50 focus:bg-white focus:ring-4 focus:ring-violet-200 focus:border-violet-500 outline-none font-semibold text-sm">
+                </div>
+                <p id="teacher-auth-error" class="text-xs text-rose-600 font-bold hidden text-center">Password non corretta!</p>
+                <div class="flex gap-2">
+                    <button type="button" onclick="closeModal('modal-teacher-auth')" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-2xl border-2 border-slate-300 text-xs">Annulla</button>
+                    <button type="submit" class="w-1/2 bg-violet-600 hover:bg-violet-700 text-white font-bold py-2.5 rounded-2xl border-2 border-violet-800 text-xs shadow-[0_3px_0_#4c1d95]">Accedi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 2: Teacher Settings Panel -->
+    <div id="modal-teacher-panel" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-[2rem] border-4 border-violet-400 shadow-2xl max-w-lg w-full overflow-hidden p-6 space-y-5">
+            <div class="flex items-center justify-between border-b-2 border-slate-100 pb-3">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-violet-600 text-xl"></i>
+                    <h3 class="text-xl font-bold text-slate-900">Pannello Impostazioni Docente</h3>
+                </div>
+                <button onclick="closeModal('modal-teacher-panel')" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Option A: Navigation Mode -->
+                <div class="bg-slate-50 p-4 rounded-2xl border-2 border-slate-200 space-y-2">
+                    <label class="block text-xs font-extrabold text-slate-700 uppercase tracking-wider">Modalità di Svolgimento</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center gap-2 p-2.5 rounded-xl border-2 bg-white cursor-pointer hover:border-violet-300 text-xs font-bold text-slate-800">
+                            <input type="radio" name="nav-mode" value="free" checked class="text-violet-600 focus:ring-violet-500">
+                            <span>Modalità Libera</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2.5 rounded-xl border-2 bg-white cursor-pointer hover:border-violet-300 text-xs font-bold text-slate-800">
+                            <input type="radio" name="nav-mode" value="sequential" class="text-violet-600 focus:ring-violet-500">
+                            <span>Sequenziale Obbligatoria</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Option B: Timer Management -->
+                <div class="bg-slate-50 p-4 rounded-2xl border-2 border-slate-200 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <label for="toggle-timer" class="text-xs font-extrabold text-slate-700 uppercase tracking-wider">Abilita Timer Esercizio</label>
+                        <input type="checkbox" id="toggle-timer" onchange="toggleTimerInputs()" class="w-5 h-5 text-violet-600 rounded focus:ring-violet-500">
+                    </div>
+                    
+                    <div id="timer-settings-box" class="hidden space-y-2 pt-2 border-t border-slate-200">
+                        <label class="block text-xs font-bold text-slate-600">Durata per ogni esercizio (Minuti):</label>
+                        <input type="number" id="input-timer-minutes" min="1" max="60" value="5" class="w-full px-3 py-2 rounded-xl border-2 border-slate-200 bg-white font-bold text-sm">
+                    </div>
+                </div>
+
+                <!-- Option C: Password Management -->
+                <div class="bg-slate-50 p-4 rounded-2xl border-2 border-slate-200 space-y-2">
+                    <label for="input-new-password" class="block text-xs font-extrabold text-slate-700 uppercase tracking-wider">Cambia Password Docente</label>
+                    <input type="text" id="input-new-password" placeholder="Nuova Password" class="w-full px-3 py-2 rounded-xl border-2 border-slate-200 bg-white font-semibold text-sm">
+                </div>
+            </div>
+
+            <div class="flex gap-2 pt-2 border-t-2 border-slate-100">
+                <button onclick="closeModal('modal-teacher-panel')" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-2xl border-2 border-slate-300 text-xs">Chiudi</button>
+                <button onclick="saveTeacherSettings()" class="w-1/2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-2xl border-2 border-emerald-700 shadow-[0_3px_0_#047857] text-xs">Salva Impostazioni</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Exercise Completion & Score Entry -->
+    <div id="modal-completion" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-[2rem] border-4 border-emerald-400 shadow-2xl max-w-sm w-full overflow-hidden p-6 space-y-4">
+            <div class="text-center">
+                <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-2 text-2xl border-2 border-emerald-300 shadow-[0_3px_0_#a7f3d0]">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900">Salva l'Esito dell'Esercizio</h3>
+                <p class="text-xs font-semibold text-slate-500">Inserisci come si è conclusa la prova su LearningApps</p>
+            </div>
+
+            <form onsubmit="confirmExerciseCompletion(event)" class="space-y-3">
+                <input type="hidden" id="modal-completion-index" value="0">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Punteggio / Esito Registrato:</label>
+                    <select id="completion-score-select" class="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 bg-slate-50 font-bold text-sm outline-none focus:border-emerald-500">
+                        <option value="10/10 - Superato">10/10 - Completato senza errori</option>
+                        <option value="Completato con successo">Completato con successo</option>
+                        <option value="Svolto con qualche aiuto">Svolto con qualche aiuto</option>
+                        <option value="Da rivedere">Da rivedere</option>
+                    </select>
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="closeModal('modal-completion')" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-2xl border-2 border-slate-300 text-xs">Torna all'Esercizio</button>
+                    <button type="submit" class="w-1/2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 rounded-2xl border-2 border-emerald-700 shadow-[0_3px_0_#047857] text-xs">Conferma ed Salva</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // 1. Data Structure for Exercises
+        const APPS_DATA = [
+            {
+                id: 0,
+                title: "Essere o avere?",
+                description: "Distingui il verbo essere dal verbo avere",
+                url: "https://learningapps.org/watch?v=ppfde5tnk26"
+            },
+            {
+                id: 1,
+                title: "Indicativo presente Verbo Essere",
+                description: "Completa il testo inserendo il verbo essere coniugato in modo corretto.",
+                url: "https://learningapps.org/watch?v=p88nuwty226"
+            },
+            {
+                id: 2,
+                title: "Indicativo presente Verbo Avere",
+                description: "Completa il testo inserendo il verbo avere coniugato in modo corretto.",
+                url: "https://learningapps.org/watch?v=px5wa4k9t26"
+            },
+            {
+                id: 3,
+                title: "Indicativo presente Verbo Essere e Avere",
+                description: "Completa il testo scegliendo tra il verbo essere e avere; coniugali in modo corretto.",
+                url: "https://learningapps.org/watch?v=pc0guxekn26"
+            }
+        ];
+
+        // 2. Global Application State
+        let settings = {
+            teacherPassword: 'docente123',
+            navigationMode: 'free', // 'free' or 'sequential'
+            timerEnabled: false,
+            timerMinutes: 5
+        };
+
+        let studentSession = {
+            active: false,
+            nome: '',
+            cognome: '',
+            classe: '',
+            startDate: null,
+            completedApps: [
+                { completed: false, durationSec: 0, score: 'Non svolto' },
+                { completed: false, durationSec: 0, score: 'Non svolto' },
+                { completed: false, durationSec: 0, score: 'Non svolto' },
+                { completed: false, durationSec: 0, score: 'Non svolto' }
+            ],
+            currentActiveIndex: null,
+            appStartTime: null
+        };
+
+        let timerInterval = null;
+        let timerSecondsRemaining = 0;
+
+        // 3. UI Navigation & Session Functions
+        function startStudentSession(e) {
+            e.preventDefault();
+            const nome = document.getElementById('input-nome').value.trim();
+            const cognome = document.getElementById('input-cognome').value.trim();
+            const classe = document.getElementById('input-classe').value.trim();
+
+            if(!nome || !cognome || !classe) return;
+
+            studentSession.active = true;
+            studentSession.nome = nome;
+            studentSession.cognome = cognome;
+            studentSession.classe = classe;
+            studentSession.startDate = new Date();
+
+            document.getElementById('badge-student-name').innerText = `${nome} ${cognome} (${classe})`;
+            document.getElementById('student-badge').classList.remove('hidden');
+            document.getElementById('student-badge').classList.add('flex');
+
+            document.getElementById('section-login').classList.add('hidden');
+            document.getElementById('section-workspace').classList.remove('hidden');
+
+            renderCards();
+            showSelectionGrid();
+        }
+
+        function goHomeIfSessionActive() {
+            if(studentSession.active) {
+                showSelectionGrid();
+            }
+        }
+
+        function renderCards() {
+            const container = document.getElementById('cards-container');
+            container.innerHTML = '';
+
+            const cardThemes = [
+                {
+                    border: 'border-sky-300',
+                    shadow: 'shadow-[0_7px_0_#bae6fd]',
+                    headerBg: 'bg-gradient-to-r from-sky-100 to-cyan-50',
+                    numBg: 'bg-sky-500 text-white border-sky-700 shadow-[0_3px_0_#0369a1]',
+                    tagText: 'text-sky-700',
+                    btnBg: 'bg-gradient-to-b from-sky-400 to-sky-500 hover:from-sky-500 hover:to-sky-600 text-white border-sky-700 shadow-[0_4px_0_#0369a1]',
+                    icon: 'fa-puzzle-piece'
+                },
+                {
+                    border: 'border-amber-300',
+                    shadow: 'shadow-[0_7px_0_#fde68a]',
+                    headerBg: 'bg-gradient-to-r from-amber-100 to-yellow-50',
+                    numBg: 'bg-amber-400 text-amber-950 border-amber-600 shadow-[0_3px_0_#d97706]',
+                    tagText: 'text-amber-800',
+                    btnBg: 'bg-gradient-to-b from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-amber-950 border-amber-600 shadow-[0_4px_0_#d97706]',
+                    icon: 'fa-sparkles'
+                },
+                {
+                    border: 'border-emerald-300',
+                    shadow: 'shadow-[0_7px_0_#a7f3d0]',
+                    headerBg: 'bg-gradient-to-r from-emerald-100 to-teal-50',
+                    numBg: 'bg-emerald-500 text-white border-emerald-700 shadow-[0_3px_0_#047857]',
+                    tagText: 'text-emerald-800',
+                    btnBg: 'bg-gradient-to-b from-emerald-400 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-white border-emerald-700 shadow-[0_4px_0_#047857]',
+                    icon: 'fa-feather-pointed'
+                },
+                {
+                    border: 'border-violet-300',
+                    shadow: 'shadow-[0_7px_0_#ddd6fe]',
+                    headerBg: 'bg-gradient-to-r from-violet-100 to-fuchsia-50',
+                    numBg: 'bg-violet-500 text-white border-violet-700 shadow-[0_3px_0_#6d28d9]',
+                    tagText: 'text-violet-800',
+                    btnBg: 'bg-gradient-to-b from-violet-400 to-violet-500 hover:from-violet-500 hover:to-violet-600 text-white border-violet-700 shadow-[0_4px_0_#6d28d9]',
+                    icon: 'fa-crown'
+                }
+            ];
+
+            APPS_DATA.forEach((app, index) => {
+                const appState = studentSession.completedApps[index] || {};
+                const isCompleted = appState.completed;
+                const theme = cardThemes[index % cardThemes.length];
+                
+                let isLocked = false;
+                if (settings.navigationMode === 'sequential' && index > 0) {
+                    if (!studentSession.completedApps[index - 1]?.completed) {
+                        isLocked = true;
+                    }
+                }
+
+                const card = document.createElement('div');
+                card.className = `sticker-card rounded-[2rem] border-3 overflow-hidden flex flex-col justify-between ${
+                    isLocked ? 'border-slate-200 opacity-70 bg-slate-50 shadow-[0_5px_0_#e2e8f0]' : `bg-white ${theme.border} ${theme.shadow}`
+                }`;
+
+                let badgeHtml = '';
+                if(isCompleted) {
+                    badgeHtml = `<span class="bg-emerald-100 text-emerald-900 text-xs font-extrabold px-3 py-1 rounded-full border-2 border-emerald-300 flex items-center gap-1"><i class="fa-solid fa-star text-amber-500"></i> Completato (${appState.score})</span>`;
+                } else if(isLocked) {
+                    badgeHtml = `<span class="bg-slate-200 text-slate-600 text-xs font-extrabold px-3 py-1 rounded-full flex items-center gap-1"><i class="fa-solid fa-lock"></i> Bloccato</span>`;
+                } else {
+                    badgeHtml = `<span class="bg-white/90 text-slate-800 text-xs font-extrabold px-3 py-1 rounded-full border-2 border-slate-200"><i class="fa-solid ${theme.icon} ${theme.tagText} mr-1"></i> Pronto!</span>`;
+                }
+
+                let btnHtml = '';
+                if(isLocked) {
+                    btnHtml = `<button disabled class="w-full bg-slate-200 text-slate-500 font-extrabold py-3 rounded-2xl border-2 border-slate-300 cursor-not-allowed text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-lock"></i> Completa prima il gioco precedente
+                    </button>`;
+                } else if(isCompleted) {
+                    btnHtml = `<button onclick="startExercise(${index})" class="sticker-btn w-full bg-amber-100 hover:bg-amber-200 text-amber-950 font-extrabold py-3 rounded-2xl border-2 border-amber-300 shadow-[0_4px_0_#fcd34d] text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-rotate-right"></i> Gioca di nuovo
+                    </button>`;
+                } else {
+                    btnHtml = `<button onclick="startExercise(${index})" class="sticker-btn w-full ${theme.btnBg} font-display font-bold py-3 rounded-2xl border-2 text-base flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-play"></i> Apri e Inizia Esercizio
+                    </button>`;
+                }
+
+                card.innerHTML = `
+                    <div>
+                        <div class="${isLocked ? 'bg-slate-100' : theme.headerBg} px-6 py-4 border-b-2 border-slate-100 flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-3">
+                                <span class="w-9 h-9 rounded-2xl ${isLocked ? 'bg-slate-300 text-slate-600 border-slate-400' : theme.numBg} font-display font-bold text-base flex items-center justify-center border-2">
+                                    ${index + 1}
+                                </span>
+                                <span class="text-xs font-extrabold ${isLocked ? 'text-slate-500' : theme.tagText} uppercase tracking-wider">Scheda ${index + 1}</span>
+                            </div>
+                            ${badgeHtml}
+                        </div>
+                        <div class="p-6 space-y-2.5">
+                            <h3 class="text-xl font-bold text-slate-900 leading-snug">${app.title}</h3>
+                            <p class="text-xs sm:text-sm font-semibold text-slate-600 leading-relaxed">${app.description}</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-2">
+                        ${btnHtml}
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function showSelectionGrid() {
+            stopTimer();
+            saveElapsedCurrentAppTime();
+            studentSession.currentActiveIndex = null;
+
+            document.getElementById('exercise-selection-grid').classList.remove('hidden');
+            document.getElementById('exercise-active-container').classList.add('hidden');
+            document.getElementById('exercise-report-container').classList.add('hidden');
+
+            // Hide all active wrappers
+            for(let i=0; i<4; i++) {
+                const el = document.getElementById(`exercise-wrapper-${i}`);
+                if(el) el.classList.add('hidden');
+            }
+
+            renderCards();
+        }
+
+        function startExercise(index) {
+            saveElapsedCurrentAppTime();
+            studentSession.currentActiveIndex = index;
+            studentSession.appStartTime = new Date();
+
+            document.getElementById('exercise-selection-grid').classList.add('hidden');
+            document.getElementById('exercise-report-container').classList.add('hidden');
+            document.getElementById('exercise-active-container').classList.remove('hidden');
+
+            for(let i=0; i<4; i++) {
+                const el = document.getElementById(`exercise-wrapper-${i}`);
+                if(el) {
+                    if(i === index) {
+                        el.classList.remove('hidden');
+                    } else {
+                        el.classList.add('hidden');
+                    }
+                }
+            }
+
+            if(settings.timerEnabled) {
+                startTimer();
+            } else {
+                stopTimer();
+                document.getElementById('timer-box').classList.add('hidden');
+            }
+        }
+
+        function saveElapsedCurrentAppTime() {
+            if(studentSession.currentActiveIndex !== null && studentSession.appStartTime) {
+                const elapsedSec = Math.floor((new Date() - studentSession.appStartTime) / 1000);
+                studentSession.completedApps[studentSession.currentActiveIndex].durationSec += elapsedSec;
+                studentSession.appStartTime = null;
+            }
+        }
+
+        // 4. Timer Functions
+        function startTimer() {
+            stopTimer();
+            timerSecondsRemaining = settings.timerMinutes * 60;
+            document.getElementById('timer-box').classList.remove('hidden');
+            updateTimerDisplay();
+
+            timerInterval = setInterval(() => {
+                timerSecondsRemaining--;
+                updateTimerDisplay();
+
+                if(timerSecondsRemaining <= 0) {
+                    stopTimer();
+                    alert("Tempo scaduto per questo esercizio!");
+                    showSelectionGrid();
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if(timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(timerSecondsRemaining / 60);
+            const s = timerSecondsRemaining % 60;
+            document.getElementById('timer-display').innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+
+        // 5. Completion & Report Handling
+        function openCompletionModal(index) {
+            document.getElementById('modal-completion-index').value = index;
+            document.getElementById('modal-completion').classList.remove('hidden');
+        }
+
+        function confirmExerciseCompletion(e) {
+            e.preventDefault();
+            const index = parseInt(document.getElementById('modal-completion-index').value, 10);
+            const score = document.getElementById('completion-score-select').value;
+
+            saveElapsedCurrentAppTime();
+            studentSession.completedApps[index].completed = true;
+            studentSession.completedApps[index].score = score;
+
+            closeModal('modal-completion');
+            showSelectionGrid();
+        }
+
+        function stopSessionPrompt() {
+            if(confirm("Vuoi davvero interrompere la sessione e passare al Report Finale?")) {
+                saveElapsedCurrentAppTime();
+                showReportTab();
+            }
+        }
+
+        function showReportTab() {
+            stopTimer();
+            saveElapsedCurrentAppTime();
+            studentSession.currentActiveIndex = null;
+
+            document.getElementById('exercise-selection-grid').classList.add('hidden');
+            document.getElementById('exercise-active-container').classList.add('hidden');
+            document.getElementById('exercise-report-container').classList.remove('hidden');
+
+            document.getElementById('report-student-fullname').innerText = `${studentSession.nome} ${studentSession.cognome}`;
+            document.getElementById('report-student-class').innerText = studentSession.classe;
+            document.getElementById('report-date').innerText = new Date().toLocaleString('it-IT');
+
+            let totalSec = studentSession.completedApps.reduce((acc, curr) => acc + curr.durationSec, 0);
+            const totMin = Math.floor(totalSec / 60);
+            const totSecRem = totalSec % 60;
+            document.getElementById('report-total-duration').innerText = `${totMin} min ${totSecRem} sec`;
+
+            const tbody = document.getElementById('report-table-body');
+            tbody.innerHTML = '';
+
+            APPS_DATA.forEach((app, i) => {
+                const state = studentSession.completedApps[i];
+                const tr = document.createElement('tr');
+                
+                const appMin = Math.floor(state.durationSec / 60);
+                const appSec = state.durationSec % 60;
+                const durStr = `${appMin}m ${appSec}s`;
+
+                const isOk = state.completed;
+                const primaryStatus = isOk ? '<span class="text-emerald-700 bg-emerald-100 px-2 py-1 rounded-md text-xs font-bold">✓ Superato</span>' : '<span class="text-amber-700 bg-amber-100 px-2 py-1 rounded-md text-xs font-bold">Incompleto</span>';
+                const secStatus = isOk ? '<span class="text-purple-700 bg-purple-100 px-2 py-1 rounded-md text-xs font-bold">✓ Raggiunto</span>' : '<span class="text-slate-600 bg-slate-100 px-2 py-1 rounded-md text-xs font-bold">In attesa</span>';
+
+                tr.innerHTML = `
+                    <td class="p-3.5 border-b font-bold text-slate-900">${i + 1}. ${app.title}</td>
+                    <td class="p-3.5 border-b text-slate-600">${durStr}</td>
+                    <td class="p-3.5 border-b font-extrabold ${isOk ? 'text-emerald-700' : 'text-slate-500'}">${state.score}</td>
+                    <td class="p-3.5 border-b">${primaryStatus}</td>
+                    <td class="p-3.5 border-b">${secStatus}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 6. Teacher Modals Logic
+        function openTeacherAuthModal() {
+            document.getElementById('teacher-auth-error').classList.add('hidden');
+            document.getElementById('teacher-password-input').value = '';
+            document.getElementById('modal-teacher-auth').classList.remove('hidden');
+        }
+
+        function handleTeacherLogin(e) {
+            e.preventDefault();
+            const psw = document.getElementById('teacher-password-input').value;
+            if(psw === settings.teacherPassword) {
+                closeModal('modal-teacher-auth');
+                openTeacherPanel();
+            } else {
+                document.getElementById('teacher-auth-error').classList.remove('hidden');
+            }
+        }
+
+        function openTeacherPanel() {
+            const radios = document.getElementsByName('nav-mode');
+            for(let r of radios) {
+                if(r.value === settings.navigationMode) r.checked = true;
+            }
+
+            document.getElementById('toggle-timer').checked = settings.timerEnabled;
+            document.getElementById('input-timer-minutes').value = settings.timerMinutes;
+            toggleTimerInputs();
+
+            document.getElementById('modal-teacher-panel').classList.remove('hidden');
+        }
+
+        function toggleTimerInputs() {
+            const enabled = document.getElementById('toggle-timer').checked;
+            const box = document.getElementById('timer-settings-box');
+            if(enabled) {
+                box.classList.remove('hidden');
+            } else {
+                box.classList.add('hidden');
+            }
+        }
+
+        function saveTeacherSettings() {
+            const radios = document.getElementsByName('nav-mode');
+            for(let r of radios) {
+                if(r.checked) settings.navigationMode = r.value;
+            }
+
+            settings.timerEnabled = document.getElementById('toggle-timer').checked;
+            settings.timerMinutes = parseInt(document.getElementById('input-timer-minutes').value, 10) || 5;
+
+            const newPsw = document.getElementById('input-new-password').value.trim();
+            if(newPsw) settings.teacherPassword = newPsw;
+
+            document.getElementById('nav-mode-indicator').innerText = settings.navigationMode === 'free' ? 'Modalità Libera' : 'Modalità Sequenziale Obbligatoria';
+
+            closeModal('modal-teacher-panel');
+            if(studentSession.active) {
+                renderCards();
+            }
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
